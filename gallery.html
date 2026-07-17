@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Corner — SIC | TGPCET</title>
+  <meta name="description"
+    content="Photos from the Student Innovation Council — builds, workshops, hack nights and demo days at TGPCET." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-hero {
+      padding: 10rem 2.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-hero__title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .page-hero__back {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--ink-dim);
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .page-hero__back:hover {
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="noise"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <nav class="nav is-scrolled" id="nav">
+    <a href="index.html" class="nav__logo"><span class="nav__logo-mark">◈</span> SIC<span
+        class="nav__logo-dot">_</span>TGPCET</a>
+    <div class="nav__links">
+      <a href="index.html#about" class="nav__link">About</a>
+      <a href="index.html#projects" class="nav__link">Projects</a>
+      <a href="index.html#idealab" class="nav__link">Idea Lab</a>
+      <a href="team.html" class="nav__link">Team</a>
+      <a href="gallery.html" class="nav__link" style="color:var(--accent)">Gallery</a>
+      <a href="index.html#contact" class="nav__cta">Join Us ↗</a>
+    </div>
+    <button class="nav__burger" id="burger" aria-label="menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about">About</a>
+    <a href="index.html#projects">Projects</a>
+    <a href="index.html#idealab">Idea Lab</a>
+    <a href="team.html">Team</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="index.html#contact">Join Us ↗</a>
+  </div>
+
+  <header class="page-hero">
+    <a href="index.html" class="page-hero__back">← BACK TO HOME</a>
+    <span class="section__index mono"></span>
+    <h1 class="page-hero__title">GALLERY <span class="accent">CORNER</span></h1>
+    <p class="section__sub mono"> moments from the lab — moments that matter</p>
+  </header>
+
+  <section class="section gallery" id="gallery" style="padding-top:2rem">
+    <div class="gallery__grid">
+      <!-- IMAGE 1 -->
+      <div class="gallery__item gallery__item--tall" data-reveal><img src="assets/1.jpeg" alt="SIC at work"></div>
+
+      <!-- IMAGE 2 -->
+      <div class="gallery__item" data-reveal><img src="assets/2.jpeg" alt="Idea Lab"></div>
+
+      <!-- IMAGE 3 -->
+      <div class="gallery__item" data-reveal><img src="assets/3.jpeg" alt="Workshop in the Idea Lab"></div>
+
+      <!-- IMAGE 4 -->
+      <div class="gallery__item gallery__item--wide" data-reveal><img src="assets/4.jpeg" alt="Team SIC"></div>
+
+      <!-- IMAGE 5 -->
+      <div class="gallery__item" data-reveal><img src="assets/5.jpeg" alt="Hack Night"></div>
+
+      <!-- IMAGE 6 -->
+
+
+      <!-- IMAGE 7 -->
+      <div class="gallery__item" data-reveal><img src="assets/7.jpeg" alt="Demo Day"></div>
+
+      <!-- IMAGE 8 -->
+      <div class="gallery__item" data-reveal><img src="assets/8.jpeg" alt="Electronics Workshop"></div>
+
+      <!-- IMAGE 9 -->
+      <div class="gallery__item" data-reveal><img src="assets/9.jpeg" alt="Robotics Build"></div>
+
+      <!-- IMAGE 10 -->
+      <div class="gallery__item gallery__item--wide" data-reveal><img src="assets/10.jpeg" alt="Team Collaboration">
+      </div>
+
+      <!-- IMAGE 11 -->
+      <div class="gallery__item" data-reveal><img src="assets/11.jpeg" alt="Innovation Session"></div>
+
+      <!-- IMAGE 12 -->
+
+
+      <!-- IMAGE 13 -->
+      <div class="gallery__item" data-reveal><img src="assets/13.jpeg" alt="Final Build"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__bottom mono">
+      <span>© 2026 STUDENT INNOVATION COUNCIL · TGPCET</span>
+      <a href="index.html">HOME ↑</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script src="js/page.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Council — SIC Team | TGPCET</title>
+  <meta name="description" content="Meet the students behind the Student Innovation Council at TGPCET." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-hero {
+      padding: 10rem 2.5rem 3rem; position: relative; overflow: hidden;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .page-hero__title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(2.5rem, 8vw, 6rem); text-transform: uppercase;
+      line-height: 1;
+    }
+    .page-hero__back {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em;
+      color: var(--ink-dim); display: inline-block; margin-bottom: 2rem;
+    }
+    .page-hero__back:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <nav class="nav is-scrolled" id="nav">
+    <a href="index.html" class="nav__logo"><span class="nav__logo-mark">◈</span> SIC<span class="nav__logo-dot">_</span>TGPCET</a>
+    <div class="nav__links">
+      <a href="index.html#about" class="nav__link">About</a>
+      <a href="index.html#projects" class="nav__link">Projects</a>
+      <a href="index.html#idealab" class="nav__link">Idea Lab</a>
+      <a href="team.html" class="nav__link" style="color:var(--accent)">Team</a>
+      <a href="gallery.html" class="nav__link">Gallery</a>
+      <a href="index.html#contact" class="nav__cta">Join Us ↗</a>
+    </div>
+    <button class="nav__burger" id="burger" aria-label="menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about">About</a>
+    <a href="index.html#projects">Projects</a>
+    <a href="index.html#idealab">Idea Lab</a>
+    <a href="team.html">Team</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="index.html#contact">Join Us ↗</a>
+  </div>
+
+  <header class="page-hero">
+    <a href="index.html" class="page-hero__back">← BACK TO HOME</a>
+    <span class="section__index mono">04 //</span>
+    <h1 class="page-hero__title">THE <span class="accent">COUNCIL</span></h1>
+    <p class="section__sub mono">// humans behind the machines</p>
+  </header>
+
+  <section class="section team" id="team" style="padding-top:2rem">
+    <div class="team__grid">
+      <!-- duplicate this block per member; put photo in assets/ -->
+      <div class="team-card" data-reveal>
+        <div class="team-card__photo"><span>👤</span></div>
+        <h3 class="team-card__name">MEMBER NAME</h3>
+        <p class="team-card__role mono">PRESIDENT · CSE</p>
+      </div>
+      <div class="team-card" data-reveal>
+        <div class="team-card__photo"><span>👤</span></div>
+        <h3 class="team-card__name">MEMBER NAME</h3>
+        <p class="team-card__role mono">VICE PRESIDENT · MECH</p>
+      </div>
+      <div class="team-card" data-reveal>
+        <div class="team-card__photo"><span>👤</span></div>
+        <h3 class="team-card__name">MEMBER NAME</h3>
+        <p class="team-card__role mono">TECH LEAD · ENTC</p>
+      </div>
+      <div class="team-card" data-reveal>
+        <div class="team-card__photo"><span>👤</span></div>
+        <h3 class="team-card__name">MEMBER NAME</h3>
+        <p class="team-card__role mono">DESIGN LEAD · CSE</p>
+      </div>
+      <div class="team-card" data-reveal>
+        <div class="team-card__photo"><span>👤</span></div>
+        <h3 class="team-card__name">MEMBER NAME</h3>
+        <p class="team-card__role mono">ROBOTICS LEAD · MECH</p>
+      </div>
+      <div class="team-card" data-reveal>
+        <div class="team-card__photo"><span>👤</span></div>
+        <h3 class="team-card__name">MEMBER NAME</h3>
+        <p class="team-card__role mono">EVENTS LEAD · CIVIL</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__bottom mono">
+      <span>© 2026 STUDENT INNOVATION COUNCIL · TGPCET</span>
+      <a href="index.html">HOME ↑</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script src="js/page.js"></script>
+</body>
+</html>

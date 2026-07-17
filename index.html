@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIC — Student Innovation Council | TGPCET</title>
+  <meta name="description"
+    content="Student Innovation Council (SIC) — a cross-department student collective at TGPCET. We innovate, create, collaborate. Home of the Poppy Humanoid and the TGPCET Idea Lab." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- ============ PRELOADER ============ -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__logo">SIC</div>
+      <div class="preloader__bar"><span id="preloaderBar"></span></div>
+      <div class="preloader__status" id="preloaderStatus">booting innovation…</div>
+    </div>
+  </div>
+
+  <!-- ============ CUSTOM CURSOR ============ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- ============ NOISE + GRID OVERLAYS ============ -->
+  <div class="noise"></div>
+
+  <!-- scroll progress -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav" id="nav">
+    <a href="#top" class="nav__logo" data-magnetic>
+      <span class="nav__logo-mark">◈</span> SIC<span class="nav__logo-dot">_</span>TGPCET
+    </a>
+    <div class="nav__links">
+      <a href="#about" class="nav__link" data-magnetic>About</a>
+      <a href="#projects" class="nav__link" data-magnetic>Projects</a>
+      <a href="#idealab" class="nav__link" data-magnetic>Idea Lab</a>
+      <a href="team.html" class="nav__link" data-magnetic>Team</a>
+      <a href="gallery.html" class="nav__link" data-magnetic>Gallery</a>
+      <a href="#contact" class="nav__cta" data-magnetic>Join Us ↗</a>
+    </div>
+    <button class="nav__burger" id="burger" aria-label="menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#idealab">Idea Lab</a>
+    <a href="team.html">Team</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="#contact">Join Us ↗</a>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="top">
+    <div class="hero__grid-bg"></div>
+    <canvas id="particleCanvas" class="hero__canvas"></canvas>
+
+    <div class="hero__tag mono" id="heroTag">
+      <span class="blink">●</span> STUDENT INNOVATION COUNCIL — EST. BY STUDENTS, FOR STUDENTS
+    </div>
+
+    <h1 class="hero__title" aria-label="Student Innovation Council TGPCET">
+      <span class="hero__line"><span class="hero__word" data-split>STUDENT</span></span>
+      <span class="hero__line hero__line--outline"><span class="hero__word" data-split>INNOVATION</span></span>
+      <span class="hero__line"><span class="hero__word hero__word--accent" data-split>COUNCIL</span></span>
+      <span class="hero__college mono">— TGPCET —</span>
+    </h1>
+
+    <div class="hero__motto mono" id="heroMotto">
+      INNOVATE <span class="accent">✦</span> CREATE <span class="accent">✦</span> COLLABORATE
+    </div>
+
+    <div class="hero__meta">
+      <p class="hero__sub" id="heroSub">
+        A cross-department student collective at TGPCET where engineers, designers
+        and dreamers build things that shouldn't be possible in a college lab.
+        <span class="accent">Spoiler: they are.</span>
+      </p>
+      <div class="hero__actions">
+        <a href="#projects" class="btn btn--primary" data-magnetic>See the Projects ↓</a>
+        <a href="#idealab" class="btn btn--ghost" data-magnetic>Visit the Idea Lab</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll mono">SCROLL<span class="hero__scroll-line"></span></div>
+
+    <!-- floating deco -->
+    <div class="hero__deco hero__deco--1 mono">{ dept: "ALL" }</div>
+    <div class="hero__deco hero__deco--2 mono">&lt;build/&gt;</div>
+    <div class="hero__deco hero__deco--3 mono">01001001</div>
+  </header>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marquee1">
+      <span>ROBOTICS ✦ AI/ML ✦ IOT ✦ 3D PRINTING ✦ WEB &amp; APPS ✦ ELECTRONICS ✦ DESIGN ✦ RESEARCH ✦&nbsp;</span>
+      <span>ROBOTICS ✦ AI/ML ✦ IOT ✦ 3D PRINTING ✦ WEB &amp; APPS ✦ ELECTRONICS ✦ DESIGN ✦ RESEARCH ✦&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section about" id="about">
+    <div class="section__head">
+      <span class="section__index mono">01 //</span>
+      <h2 class="section__title" data-reveal>WHAT IS <span class="accent">SIC?</span></h2>
+    </div>
+
+    <div class="about__grid">
+      <div class="about__text" data-reveal>
+        <p class="about__lead">
+          The <strong>Student Innovation Council</strong> is not a club you join for the certificate.
+          It's a student-run engine room where people from <em>every department</em> —
+          CSE, Mech, ENTC, Civil, and beyond — collide ideas until something new exists.
+        </p>
+        <p>
+          We prototype robots, write code at 2 AM, break things in the Idea Lab,
+          fix them better, and ship projects that go from whiteboard sketch to
+          working hardware. No hierarchy of branches. Just builders.
+        </p>
+      </div>
+
+      <div class="about__cards">
+        <div class="tilt-card about__card" data-reveal>
+          <div class="about__card-num mono">[ 01 ]</div>
+          <h3>INNOVATE</h3>
+          <p>Ideas from any department, any year. If it's crazy enough to work, we build it.</p>
+        </div>
+        <div class="tilt-card about__card" data-reveal>
+          <div class="about__card-num mono">[ 02 ]</div>
+          <h3>CREATE</h3>
+          <p>Hands-on prototyping in the TGPCET Idea Lab — 3D printers, electronics benches, tools.</p>
+        </div>
+        <div class="tilt-card about__card" data-reveal>
+          <div class="about__card-num mono">[ 03 ]</div>
+          <h3>COLLABORATE</h3>
+          <p>Mechanical meets code meets design. Cross-department teams are the default, not the exception.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- counters -->
+    <div class="stats" data-reveal>
+      <div class="stat"><span class="stat__num" data-count="8">0</span><span class="stat__plus">+</span><span
+          class="stat__label mono">ACTIVE PROJECTS</span></div>
+      <div class="stat"><span class="stat__num" data-count="40">0</span><span class="stat__plus">+</span><span
+          class="stat__label mono">STUDENT MEMBERS</span></div>
+      <div class="stat"><span class="stat__num" data-count="6">0</span><span class="stat__plus"></span><span
+          class="stat__label mono">DEPARTMENTS</span></div>
+      <div class="stat"><span class="stat__num" data-count="1">0</span><span class="stat__plus"></span><span
+          class="stat__label mono">IDEA LAB</span></div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section projects" id="projects">
+    <div class="section__head">
+      <span class="section__index mono">02 //</span>
+      <h2 class="section__title" data-reveal>PROJECT <span class="accent">CORNER</span></h2>
+      <p class="section__sub mono" data-reveal>// each project has its own page — click to enter its world</p>
+    </div>
+
+    <div class="projects__grid">
+
+      <!-- PROJECT: POPPY HUMANOID -->
+      <a href="projects/poppy-humanoid.html" class="project-card tilt-card" data-reveal>
+        <div class="project-card__top">
+          <span class="project-card__num mono">P–01</span>
+          <span class="project-card__tag mono">ROBOTICS / 3D PRINTING</span>
+        </div>
+        <div class="project-card__visual">
+          <!-- replace with real image: <img src="assets/poppy.jpg" alt="Poppy Humanoid"> -->
+          <div class="project-card__placeholder">🤖</div>
+        </div>
+        <h3 class="project-card__title">POPPY HUMANOID</h3>
+        <p class="project-card__desc">
+          An open-source, 3D-printed humanoid robot — assembled, programmed and
+          brought to life by SIC students. It walks, it moves, it turns heads.
+        </p>
+        <span class="project-card__link mono">ENTER PROJECT →</span>
+      </a>
+
+      <!-- PROJECT: CYBER POPPY PROJECT -->
+      <a href="projects/spotmicro.html" class="project-card tilt-card" data-reveal>
+        <div class="project-card__top">
+          <span class="project-card__num mono">P–02</span>
+          <span class="project-card__tag mono">AI / CYBERSECURITY</span>
+        </div>
+        <div class="project-card__visual">
+          <div class="project-card__placeholder">🔐</div>
+        </div>
+        <h3 class="project-card__title">CYBER POPPY PROJECT</h3>
+        <p class="project-card__desc">
+          Advanced AI and cybersecurity initiatives bringing next-gen protection
+          and intelligent automation to the Poppy ecosystem. Where robotics meets cyber defense.
+        </p>
+        <span class="project-card__link mono">ENTER PROJECT →</span>
+      </a>
+
+      <!-- PROJECT: SLOT 3 -->
+      <a href="#" class="project-card tilt-card project-card--soon" data-reveal>
+        <div class="project-card__top">
+          <span class="project-card__num mono">P–03</span>
+          <span class="project-card__tag mono">IN THE LAB</span>
+        </div>
+        <div class="project-card__visual">
+          <div class="project-card__placeholder">🧪</div>
+        </div>
+        <h3 class="project-card__title">YOUR NEXT PROJECT</h3>
+        <p class="project-card__desc">
+          Something is always cooking in the Idea Lab. This slot is reserved
+          for whatever we break next.
+        </p>
+        <span class="project-card__link mono">STAY TUNED…</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============ IDEA LAB ============ -->
+  <section class="section idealab" id="idealab">
+    <div class="idealab__inner">
+      <div class="section__head">
+        <span class="section__index mono">03 //</span>
+        <h2 class="section__title" data-reveal>TGPCET <span class="accent">IDEA LAB</span></h2>
+      </div>
+
+      <div class="idealab__grid">
+        <div class="idealab__text" data-reveal>
+          <p class="about__lead">
+            The Idea Lab is our home base — a makerspace inside TGPCET where
+            SIC lives, builds and occasionally sets off the smoke detector
+            (in a controlled, educational way).
+          </p>
+          <ul class="idealab__list mono">
+            <li><span class="accent">▸</span> 3D printers &amp; rapid prototyping</li>
+            <li><span class="accent">▸</span> Electronics &amp; soldering benches</li>
+            <li><span class="accent">▸</span> Microcontrollers, sensors, actuators</li>
+            <li><span class="accent">▸</span> Workshops, hackathons &amp; build nights</li>
+            <li><span class="accent">▸</span> Open to every student, every branch</li>
+          </ul>
+          <a href="gallery.html" class="btn btn--primary" data-magnetic>See it in action ↗</a>
+        </div>
+
+        <div class="idealab__terminal tilt-card" data-reveal>
+          <div class="terminal__bar">
+            <span></span><span></span><span></span>
+            <span class="terminal__title mono">idealab@tgpcet:~</span>
+          </div>
+          <div class="terminal__body mono" id="terminalBody">
+            <!-- typed by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE 2 ============ -->
+  <div class="marquee marquee--reverse" aria-hidden="true">
+    <div class="marquee__track" id="marquee2">
+      <span>BUILD ✦ BREAK ✦ LEARN ✦ REPEAT ✦ BUILD ✦ BREAK ✦ LEARN ✦ REPEAT ✦&nbsp;</span>
+      <span>BUILD ✦ BREAK ✦ LEARN ✦ REPEAT ✦ BUILD ✦ BREAK ✦ LEARN ✦ REPEAT ✦&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ============ IDEA GENERATOR ============ -->
+  <section class="section idea-gen" id="ideagen">
+    <div class="section__head">
+      <span class="section__index mono">★ //</span>
+      <h2 class="section__title" data-reveal>IDEA <span class="accent">MACHINE</span></h2>
+      <p class="section__sub mono" data-reveal>// out of ideas? spin the machine. build whatever it says. no refunds.
+      </p>
+    </div>
+    <div class="idea-gen__box" data-reveal>
+      <div class="idea-gen__display mono" id="ideaDisplay">
+        <span class="t-dim">[ PRESS THE BUTTON TO GENERATE A PROJECT IDEA ]</span>
+      </div>
+      <button class="btn btn--primary idea-gen__btn" id="ideaBtn" data-magnetic>⚡ GENERATE IDEA</button>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER / CONTACT ============ -->
+  <footer class="footer" id="contact">
+    <div class="footer__big" data-reveal>
+      GOT AN <span class="accent">IDEA?</span>
+    </div>
+    <p class="footer__sub" data-reveal>
+      The council is always open. Find us at the TGPCET Idea Lab, or reach out —
+      every project here started with one student saying <em>"what if…"</em>
+    </p>
+    <div class="footer__actions" data-reveal>
+      <a href="mailto:sic@tgpcet.ac.in" class="btn btn--primary" data-magnetic>sic@tgpcet.ac.in</a>
+      <a href="#" class="btn btn--ghost" data-magnetic>Instagram ↗</a>
+      <a href="#" class="btn btn--ghost" data-magnetic>LinkedIn ↗</a>
+    </div>
+
+    <div class="footer__bottom mono">
+      <span>© 2026 STUDENT INNOVATION COUNCIL · TGPCET</span>
+      <span>MADE BY STUDENTS, AT 2 AM, WITH ☕</span>
+      <a href="#top" data-magnetic>BACK TO TOP ↑</a>
+    </div>
+  </footer>
+
+  <!-- anime.js v3 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
