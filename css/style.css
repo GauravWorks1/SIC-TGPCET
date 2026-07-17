@@ -1116,7 +1116,20 @@ a {
   color: var(--accent);
 }
 
-/* ============ RESPONSIVE ============ */
+/* ============ VISION / MISSION BLOCKS ============ */
+.vision-block {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid var(--line);
+}
+.vision-block:last-of-type { border-bottom: none; padding-bottom: 0; }
+.vision-block__label {
+  font-size: 0.62rem; letter-spacing: 0.22em;
+  color: var(--accent); margin-bottom: 0.7rem; display: block;
+}
+.vision-block p {
+  color: var(--ink-dim); line-height: 1.75; font-size: 0.97rem;
+}
 @media (max-width: 900px) {
 
   .about__grid,
