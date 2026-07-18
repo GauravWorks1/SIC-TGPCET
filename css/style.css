@@ -76,49 +76,61 @@ a {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ============ PRELOADER ============ */
-.preloader {
+/* ============ CURTAIN OPENING ============ */
+.curtain {
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #000;
+  cursor: pointer;
 }
 
-.preloader__inner {
+.curtain__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.curtain__center {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.preloader__logo {
+.curtain__logo {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 4rem;
+  font-size: 4.2rem;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: #f3d774;
+  line-height: 1;
+  text-shadow: 0 4px 26px rgba(0, 0, 0, 0.85);
 }
 
-.preloader__bar {
-  width: 220px;
-  height: 2px;
-  background: var(--line);
-  margin: 1.2rem auto;
-  overflow: hidden;
+.curtain__sub {
+  margin-top: 0.9rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: #ffe9a8;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
 }
 
-.preloader__bar span {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-}
-
-.preloader__status {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--ink-dim);
-  letter-spacing: 0.15em;
+.curtain__skip {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.45);
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* ============ CURSOR ============ */
