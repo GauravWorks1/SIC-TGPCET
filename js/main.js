@@ -7,100 +7,35 @@ const $ = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ============ CURTAIN OPENING (video frames on canvas) ============ */
-const curtain = $('#curtain');
-const curtainCanvas = $('#curtainCanvas');
-const curtainCtx = curtainCanvas.getContext('2d');
-const FRAME_COUNT = 135;
-const FPS = 30;
-const frameSrc = i => `curtainimg/jpg/frame-${String(i).padStart(3, '0')}.jpg`;
+/* ============ PRELOADER ============ */
+const preloader = $('#preloader');
+const statusEl = $('#preloaderStatus');
+const statusMsgs = ['booting innovation…', 'loading 3d printers…', 'waking up poppy…', 'compiling ideas…', 'ready.'];
+let msgIdx = 0;
+const msgTimer = setInterval(() => {
+  msgIdx = Math.min(msgIdx + 1, statusMsgs.length - 1);
+  statusEl.textContent = statusMsgs[msgIdx];
+}, 350);
 
-let curtainDone = false;
-function endCurtain() {
-  if (curtainDone) return;
-  curtainDone = true;
-  anime({
-    targets: curtain,
-    opacity: 0,
-    duration: 600,
-    easing: 'easeOutQuad',
-    complete: () => {
-      curtain.style.display = 'none';
-      heroIntro();
-    }
-  });
-}
-
-/* draw a frame letterboxed-to-cover the screen */
-function drawCurtainFrame(img) {
-  const cw = curtainCanvas.width, ch = curtainCanvas.height;
-  const scale = Math.max(cw / img.width, ch / img.height);
-  const w = img.width * scale, h = img.height * scale;
-  curtainCtx.fillStyle = '#000';
-  curtainCtx.fillRect(0, 0, cw, ch);
-  curtainCtx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
-}
-
-function sizeCurtainCanvas() {
-  curtainCanvas.width = window.innerWidth;
-  curtainCanvas.height = window.innerHeight;
-}
-sizeCurtainCanvas();
-window.addEventListener('resize', sizeCurtainCanvas);
-
-curtain.addEventListener('click', endCurtain);
-
-if (reduceMotion) {
-  endCurtain();
-} else {
-  /* show first frame + title immediately, play once enough frames are loaded */
-  const frames = new Array(FRAME_COUNT);
-  let loaded = 0;
-  for (let i = 1; i <= FRAME_COUNT; i++) {
-    const img = new Image();
-    img.src = frameSrc(i);
-    img.onload = img.onerror = () => {
-      loaded++;
-      if (i === 1 && img.complete) drawCurtainFrame(img);
-      if (loaded === FRAME_COUNT) startCurtainPlayback();
-    };
-    frames[i - 1] = img;
-  }
-
-  anime({
-    targets: '#curtainCenter',
-    opacity: [0, 1],
-    duration: 900,
-    delay: 300,
-    easing: 'easeOutQuad'
-  });
-
-  /* safety: if images stall (slow network), skip after 8s */
-  const curtainSafety = setTimeout(endCurtain, 8000);
-
-  function startCurtainPlayback() {
-    clearTimeout(curtainSafety);
-    if (curtainDone) return;
-    /* fade the title out just before the curtains open wide */
+anime({
+  targets: '#preloaderBar',
+  width: '100%',
+  duration: 1600,
+  easing: 'easeInOutQuart',
+  complete: () => {
+    clearInterval(msgTimer);
     anime({
-      targets: '#curtainCenter',
+      targets: preloader,
       opacity: 0,
       duration: 500,
-      delay: 600,
-      easing: 'easeInQuad'
+      easing: 'easeOutQuad',
+      complete: () => {
+        preloader.style.display = 'none';
+        heroIntro();
+      }
     });
-    const start = performance.now();
-    (function tick(now) {
-      if (curtainDone) return;
-      const idx = Math.min(Math.floor((now - start) / (1000 / FPS)), FRAME_COUNT - 1);
-      const img = frames[idx];
-      if (img && img.complete && img.naturalWidth) drawCurtainFrame(img);
-      /* start the crossfade slightly early — final frames are a white screen */
-      if (idx >= FRAME_COUNT - 10) { endCurtain(); return; }
-      requestAnimationFrame(tick);
-    })(start);
   }
-}
+});
 
 /* ============ HERO INTRO ============ */
 /* split hero words into chars */
