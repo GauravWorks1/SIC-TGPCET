@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EZ InMoov Robot Head — an open-source life-size humanoid robot head built at TGPCET Student Innovation Council. Features 240-frame mechanical teardown, ESP32, servos, and live prototype demonstration." />
+  <meta name="theme-color" content="#050505" />
+  <title>EZ InMoov Robot Head — Mechanical Teardown | SIC TGPCET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/index-4zxsXoId.css" />
+  <style>
+    :root {
+      --inmoov-cyan: #00d6ff;
+      --inmoov-blue: #0050ff;
+      --inmoov-glow: 0 0 35px rgba(0, 214, 255, 0.45);
+    }
+
+    /* All scrollable details strictly on the left side so they never overlap the video */
+    .overlay {
+      left: 5% !important;
+      right: auto !important;
+      top: 50% !important;
+      transform: translateY(calc(-50% + 15px)) !important;
+      width: min(440px, 42vw) !important;
+      text-align: left !important;
+    }
+    .overlay--visible {
+      transform: translateY(-50%) !important;
+      opacity: 1 !important;
+    }
+    .oc {
+      align-items: flex-start !important;
+      text-align: left !important;
+    }
+    .oc__body {
+      max-width: 420px !important;
+    }
+    .oc__actions {
+      justify-content: flex-start !important;
+    }
+
+    /* Bottom Left Meters & Controls */
+    .explode-meter {
+      position: absolute;
+      bottom: 26px;
+      left: 28px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 6px 16px;
+    }
+    .explode-meter__label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--inmoov-cyan);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .explode-meter__bar {
+      width: 100px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    .explode-meter__fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0050ff, #00d6ff);
+      transition: width 0.1s linear;
+      box-shadow: 0 0 8px #00d6ff;
+    }
+
+    .drag-hint {
+      position: absolute;
+      bottom: 74px;
+      left: 28px;
+      z-index: 20;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 0.14em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      background: rgba(5, 5, 10, 0.65);
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .drag-hint span {
+      color: var(--inmoov-cyan);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 1; filter: drop-shadow(0 0 6px var(--inmoov-cyan)); }
+    }
+
+    /* Floating Corner Live Video Widget - Large & Uninterrupted Loop */
+    .corner-video-widget {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: clamp(340px, 22vw, 420px);
+      z-index: 999;
+      background: rgba(8, 10, 16, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 214, 255, 0.45);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 214, 255, 0.28);
+      overflow: hidden;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      pointer-events: all;
+    }
+    .corner-video-widget.minimized .corner-video-inner {
+      display: none;
+    }
+    .corner-video-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(14, 18, 26, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .corner-video-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--inmoov-cyan);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .live-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00d6ff;
+      box-shadow: 0 0 10px #00d6ff;
+      animation: pulseDot 1.6s infinite ease-in-out;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 14px #00d6ff; }
+    }
+    .corner-video-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .corner-video-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 6px;
+      font-size: 10px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+    .corner-video-btn:hover {
+      background: rgba(0, 214, 255, 0.22);
+      border-color: var(--inmoov-cyan);
+      color: #fff;
+    }
+    .corner-video-inner {
+      position: relative;
+      width: 100%;
+      background: #000;
+      aspect-ratio: 9 / 16;
+      max-height: 440px;
+      overflow: hidden;
+    }
+    .corner-video-inner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .corner-video-overlay {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+    .corner-video-badge {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.95);
+      background: rgba(5, 8, 14, 0.8);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- SIC back navigation -->
+    <a href="../index.html#projects" id="sic-back" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(5,5,5,.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(200,255,0,.45);border-radius:999px;color:#c8ff00;font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.12em;text-decoration:none;transition:background .25s,transform .25s" onmouseover="this.style.background='rgba(200,255,0,.15)';this.style.transform='translateX(-3px)'" onmouseout="this.style.background='rgba(5,5,5,.75)';this.style.transform='none'">← BACK TO SIC</a>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar navbar--visible" id="navbar">
+      <div class="navbar__progress" id="navProgress" style="width: 0%;"></div>
+      <div class="container navbar__inner">
+        <a href="#overview" class="navbar__logo">
+          <div class="navbar__logo-mark" style="background:linear-gradient(135deg, #0050ff, #00d6ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">
+            <span>IN</span>
+          </div>
+          <div>
+            <span class="navbar__logo-k">EZ-INMOOV</span>
+            <span class="navbar__logo-nine">ROBOT HEAD</span>
+          </div>
+        </a>
+        <ul class="navbar__links">
+          <li><button class="navbar__link" onclick="scrollToRatio(0.04)">Overview</button></li>
+          <li><button class="navbar__link" onclick="scrollToRatio(0.28)">Kinematics</button></li>
+          <li><button class="navbar__link" onclick="scrollToRatio(0.55)">Exploded Teardown</button></li>
+          <li><button class="navbar__link" onclick="scrollToRatio(0.78)">ESP32 &amp; Servos</button></li>
+          <li><button class="navbar__link" onclick="document.getElementById('specs').scrollIntoView({behavior:'smooth'})">Specs</button></li>
+        </ul>
+        <button class="navbar__cta" onclick="document.getElementById('reserve').scrollIntoView({behavior:'smooth'})">
+          <span>TGPCET Idea Lab ↗</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Scroll Canvas Container (700vh) for Frame Scrubbing -->
+    <div class="scroll-canvas-container" id="scrollContainer" style="height: 700vh;">
+      <!-- Preloader -->
+      <div class="loader" id="loader">
+        <div class="loader__inner">
+          <div class="loader__logo">
+            <span class="loader__logo-k">I</span>
+            <span class="loader__logo-9">N</span>
+          </div>
+          <p class="loader__name">PRELOADING 240 TEARDOWN FRAMES</p>
+          <div class="loader__bar-wrap">
+            <div class="loader__bar" id="loaderBar" style="width: 0%;"></div>
+          </div>
+          <p class="loader__pct" id="loaderPct">0%</p>
+        </div>
+      </div>
+
+      <div class="sticky-canvas-wrap">
+        <div class="canvas-glow"></div>
+        <canvas id="mainCanvas" class="main-canvas"></canvas>
+
+        <!-- Exploded View Indicator -->
+        <div class="explode-meter">
+          <div class="explode-meter__label">
+            <span style="font-size:12px;">⚡</span> MECHANICAL TEARDOWN: <span id="explodePct">0%</span>
+          </div>
+          <div class="explode-meter__bar">
+            <div class="explode-meter__fill" id="explodeFill"></div>
+          </div>
+        </div>
+
+        <!-- Drag hint -->
+        <div class="drag-hint" id="dragHint">
+          <span>◈</span> SCROLL TO DISASSEMBLE &bull; WATCH REVEALED HARDWARE
+        </div>
+
+        <!-- Phase 0: Overview (Left) -->
+        <div class="overlay overlay--left" id="phase0">
+          <div class="oc oc--side">
+            <span class="oc__eyebrow">HUMANOID BIOMIMETIC HEAD</span>
+            <h1 class="t-hero oc__headline">EZ-INMOOV</h1>
+            <p class="t-subtitle oc__tagline">Life-Size 3D-Printed Humanoid Cranium with ESP32 &amp; Vision AI</p>
+            <p class="t-body oc__body">
+              Engineered by the Student Innovation Council at TGPCET from Gael Langevin's open-source InMoov architecture. Built with precision 3D-printed modular plates, high-torque servos, and dual-camera spatial computer vision.
+            </p>
+            <div class="hero-scroll-hint">
+              <span class="hero-scroll-hint__line"></span>
+              <span class="hero-scroll-hint__text">SCROLL TO DISSECT &amp; REVEAL INTERNAL ELECTRONICS</span>
+              <span class="hero-scroll-hint__line"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 1: Modular Disassembly (Left) -->
+        <div class="overlay overlay--left" id="phase1">
+          <div class="oc oc--side">
+            <span class="oc__eyebrow">MODULAR DISASSEMBLY</span>
+            <h2 class="t-title oc__headline">Outer Shell Separates</h2>
+            <p class="t-body oc__body">
+              As you scroll, the outer 3D-printed shell pulls apart: the upper cranium dome lifts, the face mask floats forward, and the jaw drops away, uncovering the hidden mechatronic framework.
+            </p>
+            <div class="oc__specs">
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">38</span>
+                <span class="oc__spec-label">PRINTED MODULES</span>
+              </div>
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">PLA+</span>
+                <span class="oc__spec-label">BIO-POLYMER CHASSIS</span>
+              </div>
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">16+</span>
+                <span class="oc__spec-label">DEGREES OF FREEDOM</span>
+              </div>
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">&lt;40 ms</span>
+                <span class="oc__spec-label">SERVO RESPONSE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2: Internal Electronics Bay (Left) -->
+        <div class="overlay overlay--left" id="phase2">
+          <div class="oc oc--side">
+            <span class="oc__eyebrow">ELECTRONICS &amp; ACTUATION</span>
+            <h2 class="t-title oc__headline">ESP32 Core &amp; Servos Revealed</h2>
+            <p class="t-body oc__body">
+              Underneath the separated face plate sits the active hardware core:
+            </p>
+            <ul class="oc__bullets">
+              <li class="oc__bullet-item">
+                <span class="oc__bullet-icon">◈</span>
+                <span class="oc__bullet-text"><strong>ESP32-WROOM-32</strong> — Dual-core processor handling servo kinematics, WiFi telemetry, and I2C sensor bus.</span>
+              </li>
+              <li class="oc__bullet-item">
+                <span class="oc__bullet-icon">◉</span>
+                <span class="oc__bullet-text"><strong>MG996R Metal Servos</strong> — 15 kg·cm high-torque servos driving mandible speech actuation and cervical neck yaw.</span>
+              </li>
+              <li class="oc__bullet-item">
+                <span class="oc__bullet-icon">◆</span>
+                <span class="oc__bullet-text"><strong>Color-Coded Wire Loom</strong> — Dedicated servo signal cables, DuPont jumper traces, and 6V high-current power buses.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 3: Kinematics (Left) -->
+        <div class="overlay overlay--left" id="phase3">
+          <div class="oc oc--side">
+            <span class="oc__eyebrow">CERVICAL ARCHITECTURE</span>
+            <h2 class="t-title oc__headline">Multi-Axis Neck Motion</h2>
+            <p class="t-body oc__body">
+              The neck mechanism replicates human cervical kinematics: 180° pan (look left/right), 60° tilt (nod up/down), and 40° roll driven by dual high-torque servos and steel tie rods.
+            </p>
+            <div class="oc__specs">
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">180&deg;</span>
+                <span class="oc__spec-label">HEAD PAN (YAW)</span>
+              </div>
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">20 kg·cm</span>
+                <span class="oc__spec-label">TORQUE RATING</span>
+              </div>
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">6V 12A</span>
+                <span class="oc__spec-label">REGULATED BUS</span>
+              </div>
+              <div class="oc__spec-item">
+                <span class="oc__spec-value">OpenCV</span>
+                <span class="oc__spec-label">SPATIAL TRACKING</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 4: Full Assembly & Future Scope (Left) -->
+        <div class="overlay overlay--left" id="phase4">
+          <div class="oc oc--side">
+            <span class="oc__eyebrow">TGPCET PRADNYA YANTRA IDEA LAB</span>
+            <h2 class="t-display oc__headline">Fully Integrated Humanoid</h2>
+            <p class="t-subtitle oc__tagline">From Cranium to Full Upper Torso and Bionic Five-Finger Tendon Hands.</p>
+            <div class="oc__actions">
+              <button class="btn-primary" onclick="document.getElementById('specs').scrollIntoView({behavior:'smooth'})">
+                <span>View Full Specifications &darr;</span>
+              </button>
+              <button class="btn-ghost" onclick="document.getElementById('reserve').scrollIntoView({behavior:'smooth'})">
+                <span>Explore Idea Lab <span class="btn-arrow">&rarr;</span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-bottom-fade"></div>
+      </div>
+    </div>
+
+    <!-- Technical Specifications Section -->
+    <section class="specs-section" id="specs">
+      <div class="container">
+        <div class="specs-section__header">
+          <span class="t-caption">COMPREHENSIVE TEARDOWN</span>
+          <h2 class="t-display" style="margin-top:12px;">Technical Architecture</h2>
+          <p class="t-subtitle specs-section__subtitle">
+            Engineered modularly across mechanical, electronic, and software layers for seamless research and expansion.
+          </p>
+        </div>
+
+        <div class="specs-grid">
+          <!-- Card 1: Processing & Brain -->
+          <div class="specs-card">
+            <div class="specs-card__header">
+              <span class="specs-card__icon">🧠</span>
+              <h3 class="specs-card__title">Core Processing</h3>
+            </div>
+            <ul class="specs-card__list">
+              <li class="specs-card__row">
+                <span class="specs-card__label">Primary Controller</span>
+                <span class="specs-card__value">ESP32-WROOM-32 / ESP32-CAM</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Co-Processor</span>
+                <span class="specs-card__value">PCA9685 16-Ch PWM I2C</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Vision Framework</span>
+                <span class="specs-card__value">OpenCV / MediaPipe AI</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Speech Recognition</span>
+                <span class="specs-card__value">Offline Neural Vocoder</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Audio Output</span>
+                <span class="specs-card__value">3W Speaker + PAM8403</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Kinematics & Actuators -->
+          <div class="specs-card">
+            <div class="specs-card__header">
+              <span class="specs-card__icon">⚙️</span>
+              <h3 class="specs-card__title">Kinematics & Servos</h3>
+            </div>
+            <ul class="specs-card__list">
+              <li class="specs-card__row">
+                <span class="specs-card__label">Neck Pan (Yaw)</span>
+                <span class="specs-card__value">1x MG996R (180°)</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Neck Tilt (Pitch)</span>
+                <span class="specs-card__value">1x DS3218 (20 kg·cm)</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Neck Roll</span>
+                <span class="specs-card__value">1x MG996R (±25°)</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Jaw Articulation</span>
+                <span class="specs-card__value">1x MG996R / MG90S</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Eye Mechanism</span>
+                <span class="specs-card__value">3x SG90 (Pan/Tilt/Eyelids)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Sensors & Telemetry -->
+          <div class="specs-card">
+            <div class="specs-card__header">
+              <span class="specs-card__icon">👁️</span>
+              <h3 class="specs-card__title">Sensors & Vision</h3>
+            </div>
+            <ul class="specs-card__list">
+              <li class="specs-card__row">
+                <span class="specs-card__label">Vision Capture</span>
+                <span class="specs-card__value">Dual OV2640 / CMOS Cams</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Resolution</span>
+                <span class="specs-card__value">1080p @ 30 FPS</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Proximity Detection</span>
+                <span class="specs-card__value">HC-SR04 Ultrasonic</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Sound Tracking</span>
+                <span class="specs-card__value">Dual Electret Mic Array</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Visual Indicators</span>
+                <span class="specs-card__value">Addressable WS2812B Rings</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 4: Chassis & Fabrication -->
+          <div class="specs-card">
+            <div class="specs-card__header">
+              <span class="specs-card__icon">🛠️</span>
+              <h3 class="specs-card__title">Fabrication & Power</h3>
+            </div>
+            <ul class="specs-card__list">
+              <li class="specs-card__row">
+                <span class="specs-card__label">Architecture</span>
+                <span class="specs-card__value">InMoov Open Source V1.2</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Print Material</span>
+                <span class="specs-card__value">PLA+ White / Carbon Matte</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Print Duration</span>
+                <span class="specs-card__value">~140 Print Hours</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Power Supply</span>
+                <span class="specs-card__value">6V 12A DC Regulated Switch</span>
+              </li>
+              <li class="specs-card__row">
+                <span class="specs-card__label">Total Weight</span>
+                <span class="specs-card__value">~2.8 kg (Head + Neck Base)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="specs-legal">
+          InMoov is an open-source project created by Gael Langevin under CC BY-NC 3.0. Enhanced, 3D printed, programmed and maintained by the Student Innovation Council, TGPCET.
+        </p>
+      </div>
+    </section>
+
+    <!-- Lab Inquiry Section -->
+    <section class="reserve-section" id="reserve">
+      <div class="reserve-section__bg"></div>
+      <div class="container reserve-section__inner">
+        <div class="reserve-section__badge">
+          <span class="reserve-led"></span>
+          <span>TGPCET PRADNYA YANTRA IDEA LAB</span>
+        </div>
+
+        <h2 class="t-display reserve-section__headline">
+          Build With Us in the <span class="gradient-text">Idea Lab</span>
+        </h2>
+        <p class="t-subtitle reserve-section__body">
+          Want to program humanoid robotics, train computer vision models, or build next-generation biomechatronics? Join the Student Innovation Council.
+        </p>
+
+        <div class="reserve-form">
+          <a href="../index.html#contact" class="btn-primary" style="display:inline-flex;text-decoration:none;align-items:center;gap:10px;">
+            <span>Get Involved with SIC ↗</span>
+          </a>
+          <p class="reserve-form__note">TGPCET Campus &bull; Open to all engineering departments</p>
+        </div>
+
+        <div class="reserve-perks">
+          <div class="reserve-perk">
+            <span class="reserve-perk__icon">⚡</span>
+            <div>
+              <h4 class="reserve-perk__title">Open Source Hardware</h4>
+              <p class="reserve-perk__body">Access all 3D CAD files, slice configurations, and Arduino/Python driver code.</p>
+            </div>
+          </div>
+          <div class="reserve-perk">
+            <span class="reserve-perk__icon">🤖</span>
+            <div>
+              <h4 class="reserve-perk__title">Hands-On Prototyping</h4>
+              <p class="reserve-perk__body">Work directly with 3D printers, CNC tools, microcontrollers, and high-torque actuators.</p>
+            </div>
+          </div>
+          <div class="reserve-perk">
+            <span class="reserve-perk__icon">🚀</span>
+            <div>
+              <h4 class="reserve-perk__title">Cross-Department Team</h4>
+              <p class="reserve-perk__body">Collaboration between Mechanical, CSE, AI/DS, and Electronics innovators.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <div class="footer__logo">
+              <div class="footer__logo-mark">◈</div>
+              <span class="footer__logo-name">SIC TGPCET</span>
+            </div>
+            <p class="footer__tagline">STUDENT INNOVATION COUNCIL</p>
+            <p class="footer__desc">
+              Transforming innovative ideas into working robotics, AI systems, and tangible hardware.
+            </p>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-heading">Projects</h4>
+            <ul class="footer__col-links">
+              <li><a href="poppy-humanoid.html" class="footer__link">TULSI Humanoid</a></li>
+              <li><a href="spotmicro.html" class="footer__link">Spot Micro</a></li>
+              <li><a href="ez-inmoov.html" class="footer__link" style="color:#00d6ff;">EZ-InMoov Head</a></li>
+              <li><a href="../index.html#projects" class="footer__link">All Projects</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-heading">Navigation</h4>
+            <ul class="footer__col-links">
+              <li><a href="../index.html" class="footer__link">Home</a></li>
+              <li><a href="../index.html#about" class="footer__link">About SIC</a></li>
+              <li><a href="../index.html#idealab" class="footer__link">Idea Lab</a></li>
+              <li><a href="../team.html" class="footer__link">Team</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-heading">Lab Info</h4>
+            <ul class="footer__col-links">
+              <li><span class="footer__link" style="color:var(--text-secondary)">TGPCET Mohgaon</span></li>
+              <li><span class="footer__link" style="color:var(--text-secondary)">Pradnya Yantra Lab</span></li>
+              <li><a href="mailto:sic@tgpcet.ac.in" class="footer__link">sic@tgpcet.ac.in</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <p class="footer__legal">&copy; 2026 Student Innovation Council &bull; TGPCET. All rights reserved.</p>
+          <div class="footer__bottom-links">
+            <a href="../index.html#top" class="footer__bottom-link">Back to Top &uarr;</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Corner Live Video on Loop (Always playing from start, zero scroll effect) -->
+    <div class="corner-video-widget" id="cornerVideoWidget">
+      <div class="corner-video-header">
+        <div class="corner-video-status">
+          <span class="live-pulse"></span>
+          <span>LIVE LAB PROTOTYPE</span>
+        </div>
+        <div class="corner-video-actions">
+          <button class="corner-video-btn" id="btnMuteVideo" onclick="toggleVideoSound()">UNMUTE</button>
+          <button class="corner-video-btn" onclick="toggleVideoMinimize()">_</button>
+        </div>
+      </div>
+      <div class="corner-video-inner">
+        <video id="inmoovLoopVideo" autoplay loop muted playsinline preload="auto">
+          <source src="assets/inmoov_live.mp4" type="video/mp4" />
+          <source src="../assets/inmoov_live.mp4" type="video/mp4" />
+        </video>
+        <div class="corner-video-overlay">
+          <span class="corner-video-badge">TGPCET IDEA LAB &bull; LOOP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 240-Frame Canvas Scrubber Engine (Identical to SpotMicro & TULSI) -->
+  <script>
+    const TOTAL_FRAMES = 240;
+    const images = [];
+    let loadedCount = 0;
+    let isReady = false;
+    let currentFrameIndex = 1;
+    let targetFrameIndex = 1;
+
+    const overlayPhases = [
+      { id: 'phase0', start: 0.00, end: 0.16 },
+      { id: 'phase1', start: 0.16, end: 0.42 },
+      { id: 'phase2', start: 0.42, end: 0.68 },
+      { id: 'phase3', start: 0.68, end: 0.88 },
+      { id: 'phase4', start: 0.88, end: 1.00 }
+    ];
+
+    function getFramePath(idx) {
+      const num = String(idx).padStart(3, '0');
+      return `img/inmoov/ezgif-frame-${num}.jpg`;
+    }
+
+    function initFrameScrubber() {
+      const loaderBar = document.getElementById('loaderBar');
+      const loaderPct = document.getElementById('loaderPct');
+      const loader = document.getElementById('loader');
+
+      // Preload all 240 frames
+      for (let i = 1; i <= TOTAL_FRAMES; i++) {
+        const img = new Image();
+        img.src = getFramePath(i);
+
+        img.onload = () => {
+          loadedCount++;
+          const pct = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+          if (loaderBar) loaderBar.style.width = pct + '%';
+          if (loaderPct) loaderPct.innerText = pct + '%';
+
+          if (loadedCount === TOTAL_FRAMES) {
+            isReady = true;
+            if (loader) {
+              loader.style.opacity = '0';
+              setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+            resizeCanvas();
+            drawFrame(1);
+          }
+        };
+
+        img.onerror = () => {
+          loadedCount++;
+          if (loadedCount === TOTAL_FRAMES) {
+            isReady = true;
+            if (loader) loader.style.display = 'none';
+            resizeCanvas();
+            drawFrame(1);
+          }
+        };
+
+        images.push(img);
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // Start continuous rendering loop
+      requestAnimationFrame(renderLoop);
+
+      // Start live corner video immediately
+      const loopVideo = document.getElementById('inmoovLoopVideo');
+      if (loopVideo) {
+        loopVideo.play().catch(() => {});
+      }
+
+      onScroll();
+    }
+
+    function resizeCanvas() {
+      const canvas = document.getElementById('mainCanvas');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      drawFrame(Math.round(currentFrameIndex));
+    }
+
+    function drawFrame(idx) {
+      const canvas = document.getElementById('mainCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const img = images[idx - 1];
+      if (!img || !img.complete) return;
+
+      const cw = window.innerWidth;
+      const ch = window.innerHeight;
+
+      ctx.clearRect(0, 0, cw, ch);
+
+      // Aspect-ratio preserve scaling
+      const imgRatio = img.naturalWidth / img.naturalHeight;
+      const screenRatio = cw / ch;
+
+      let dw, dh, dx, dy;
+      if (imgRatio > screenRatio) {
+        dw = cw * 0.95;
+        dh = dw / imgRatio;
+        dx = (cw - dw) / 2;
+        dy = (ch - dh) / 2;
+      } else {
+        dh = ch * 0.92;
+        dw = dh * imgRatio;
+        dx = (cw - dw) / 2;
+        dy = (ch - dh) / 2;
+      }
+
+      // Shift slightly left to balance with corner video on right and text on left
+      dx -= (cw * 0.04);
+
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    function renderLoop() {
+      if (isReady) {
+        currentFrameIndex += (targetFrameIndex - currentFrameIndex) * 0.18;
+        const roundIdx = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(currentFrameIndex)));
+        drawFrame(roundIdx);
+      }
+      requestAnimationFrame(renderLoop);
+    }
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const scrollContainer = document.getElementById('scrollContainer');
+      if (!scrollContainer) return;
+      const docHeight = scrollContainer.offsetHeight - window.innerHeight;
+      const scrollProgress = Math.min(Math.max(scrollY / docHeight, 0), 1);
+
+      document.getElementById('navProgress').style.width = (scrollProgress * 100) + '%';
+
+      // Map scrollProgress [0, 1] to frame [1, 240]
+      targetFrameIndex = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(scrollProgress * (TOTAL_FRAMES - 1)) + 1));
+
+      // Teardown Percentage Meter
+      const pct = Math.round(scrollProgress * 100);
+      const explodePct = document.getElementById('explodePct');
+      const explodeFill = document.getElementById('explodeFill');
+      if (explodePct) explodePct.innerText = pct + '%';
+      if (explodeFill) explodeFill.style.width = pct + '%';
+
+      // Text Overlays on Left Side
+      overlayPhases.forEach(phase => {
+        const el = document.getElementById(phase.id);
+        if (el) {
+          if (scrollProgress >= phase.start && scrollProgress <= phase.end) {
+            el.classList.add('overlay--visible');
+          } else {
+            el.classList.remove('overlay--visible');
+          }
+        }
+      });
+
+      const dragHint = document.getElementById('dragHint');
+      if (dragHint) {
+        dragHint.style.opacity = scrollProgress > 0.06 ? '0' : '1';
+      }
+    }
+
+    function scrollToRatio(ratio) {
+      const scrollContainer = document.getElementById('scrollContainer');
+      const docHeight = scrollContainer.offsetHeight - window.innerHeight;
+      window.scrollTo({
+        top: ratio * docHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    function toggleVideoSound() {
+      const v = document.getElementById('inmoovLoopVideo');
+      const btn = document.getElementById('btnMuteVideo');
+      if (v) {
+        v.muted = !v.muted;
+        if (btn) btn.innerText = v.muted ? 'UNMUTE' : 'MUTE';
+      }
+    }
+
+    function toggleVideoMinimize() {
+      const w = document.getElementById('cornerVideoWidget');
+      if (w) {
+        w.classList.toggle('minimized');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initFrameScrubber);
+  </script>
+</body>
+</html>

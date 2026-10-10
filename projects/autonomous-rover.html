@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Autonomous Heavy-Duty All-Terrain Rover by Student Innovation Council (SIC), TGPCET. Features high-torque planetary motors, robust motor drivers, linear actuators, Raspberry Pi compute, 4K webcam vision, and dual lead-acid power." />
+  <meta name="theme-color" content="#050505" />
+  <title>Autonomous Heavy All-Terrain Rover | SIC TGPCET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/index-4zxsXoId.css" />
+  <style>
+    :root {
+      --amber: #ff9d00;
+      --amber-bright: #ffb833;
+      --amber-glow: rgba(255, 157, 0, 0.4);
+      --bg-dark: #050608;
+      --card-bg: rgba(14, 18, 26, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-amber: rgba(255, 157, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e5e7eb;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Fixed Header Nav */
+    .rover-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      z-index: 9990;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      background: rgba(5, 6, 8, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .rover-nav__brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .rover-nav__badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 157, 0, 0.15);
+      color: var(--amber);
+      border: 1px solid var(--border-amber);
+    }
+    .rover-nav__title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .rover-nav__links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .rover-nav__link {
+      font-size: 13px;
+      color: #9ca3af;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .rover-nav__link:hover {
+      color: var(--amber-bright);
+    }
+
+    /* Hero Section */
+    .rover-hero {
+      padding: 110px 2rem 40px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+    .rover-hero__header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .rover-tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--amber);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rover-tagline::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 10px var(--amber);
+    }
+    .rover-hero__title {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .rover-hero__subtitle {
+      color: #9ca3af;
+      font-size: 16px;
+      max-width: 780px;
+    }
+
+    /* 360 Inspection Interactive Stage */
+    .viewer-card {
+      position: relative;
+      width: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 157, 0, 0.04) 0%, rgba(10, 12, 18, 0.95) 75%);
+      border: 1px solid rgba(255, 157, 0, 0.25);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 157, 0, 0.12);
+      margin-bottom: 40px;
+      user-select: none;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background: rgba(14, 18, 26, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .viewer-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+    }
+    .status-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 10px var(--amber);
+      animation: pulseAnim 1.8s infinite ease-in-out;
+    }
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 14px var(--amber-bright); }
+    }
+    .viewer-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e5e7eb;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tool-btn:hover {
+      background: rgba(255, 157, 0, 0.2);
+      border-color: var(--amber);
+      color: #fff;
+    }
+    .tool-btn.active {
+      background: rgba(255, 157, 0, 0.25);
+      border-color: var(--amber-bright);
+      color: var(--amber-bright);
+    }
+
+    /* Viewer Stage Container */
+    .viewer-stage {
+      position: relative;
+      width: 100%;
+      height: min(620px, 68vh);
+      min-height: 440px;
+      overflow: hidden;
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #030406;
+    }
+    .viewer-stage:active {
+      cursor: grabbing;
+    }
+
+    .viewer-image-wrap {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.08s ease-out;
+      will-change: transform;
+    }
+    .viewer-image-wrap img {
+      max-width: 96%;
+      max-height: 94%;
+      object-fit: contain;
+      pointer-events: none;
+      filter: drop-shadow(0 15px 35px rgba(0,0,0,0.85));
+    }
+
+    /* Interactive Spec Hotspots */
+    .hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      z-index: 50;
+      cursor: pointer;
+    }
+    .hotspot__pin {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(10, 12, 18, 0.9);
+      border: 2px solid var(--amber);
+      box-shadow: 0 0 15px var(--amber-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+    }
+    .hotspot__pin::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid var(--amber);
+      opacity: 0.6;
+      animation: ripple 2.2s infinite ease-out;
+    }
+    @keyframes ripple {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    .hotspot:hover .hotspot__pin,
+    .hotspot.is-active .hotspot__pin {
+      transform: scale(1.22);
+      background: var(--amber);
+      color: #000;
+      box-shadow: 0 0 25px var(--amber-bright);
+    }
+
+    /* Hotspot Tooltip / Popover */
+    .hotspot__tooltip {
+      position: absolute;
+      bottom: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(10px) scale(0.92);
+      width: 280px;
+      background: rgba(12, 15, 22, 0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-amber);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 157, 0, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+    .hotspot:hover .hotspot__tooltip,
+    .hotspot.is-active .hotspot__tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+    .tooltip__tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .tooltip__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .tooltip__desc {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.45;
+    }
+
+    /* 360 Rotation Compass Meter */
+    .compass-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(10, 12, 18, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 16px;
+      border-radius: 30px;
+      backdrop-filter: blur(12px);
+    }
+    .compass-dial {
+      position: relative;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 157, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s linear;
+    }
+    .compass-dial::before {
+      content: '▲';
+      font-size: 8px;
+      color: var(--amber-bright);
+      transform: translateY(-2px);
+    }
+    .compass-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .drag-instruction {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.45);
+      background: rgba(10, 12, 18, 0.7);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+    }
+
+    /* Quick Specs Grid */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+    .spec-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .spec-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--amber), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .spec-card:hover {
+      border-color: var(--border-amber);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 157, 0, 0.15);
+    }
+    .spec-card:hover::before {
+      opacity: 1;
+    }
+    .spec-icon {
+      font-size: 26px;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .spec-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .spec-body {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.55;
+    }
+    .spec-meta {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+    .spec-meta__label {
+      color: #6b7280;
+    }
+    .spec-meta__val {
+      color: var(--amber-bright);
+      font-weight: 700;
+    }
+
+    /* Subsystem Architecture */
+    .arch-section {
+      margin-bottom: 80px;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .section-sub {
+      color: #9ca3af;
+      font-size: 15px;
+      margin-bottom: 30px;
+      max-width: 700px;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 900px) {
+      .pipeline-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .pipeline-card {
+      background: rgba(14, 18, 26, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 24px;
+    }
+    .pipeline-card__num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pipeline-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .pipeline-card__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+    .pipeline-card__list li {
+      position: relative;
+      padding-left: 18px;
+    }
+    .pipeline-card__list li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+
+    /* Footer */
+    .rover-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 2rem;
+      text-align: center;
+      background: #030406;
+      color: #6b7280;
+      font-size: 13px;
+    }
+    .rover-footer a {
+      color: var(--amber);
+      text-decoration: none;
+    }
+
+    /* Floating Corner Live Video Widget - Continuous Loop */
+    .corner-video-widget {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: clamp(340px, 24vw, 420px);
+      z-index: 999;
+      background: rgba(8, 10, 16, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-amber);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 157, 0, 0.25);
+      overflow: hidden;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      pointer-events: all;
+    }
+    .corner-video-widget.minimized .corner-video-inner {
+      display: none;
+    }
+    .corner-video-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(14, 18, 26, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .corner-video-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--amber-bright);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .live-pulse-amber {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 10px var(--amber);
+      animation: pulseDotAmber 1.6s infinite ease-in-out;
+    }
+    @keyframes pulseDotAmber {
+      0%, 100% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 14px var(--amber-bright); }
+    }
+    .corner-video-tabs {
+      display: flex;
+      gap: 4px;
+    }
+    .corner-video-tab {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.75);
+      border-radius: 4px;
+      font-size: 10px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .corner-video-tab:hover {
+      background: rgba(255, 157, 0, 0.2);
+      color: #fff;
+    }
+    .corner-video-tab.active {
+      background: rgba(255, 157, 0, 0.28);
+      border-color: var(--amber-bright);
+      color: var(--amber-bright);
+    }
+    .corner-video-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .corner-video-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 6px;
+      font-size: 10px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+    .corner-video-btn:hover {
+      background: rgba(255, 157, 0, 0.25);
+      border-color: var(--amber);
+      color: #fff;
+    }
+    .corner-video-inner {
+      position: relative;
+      width: 100%;
+      background: #000;
+      aspect-ratio: 16 / 9;
+      max-height: 440px;
+      overflow: hidden;
+    }
+    .corner-video-inner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .corner-video-inner video.active {
+      display: block;
+    }
+    .corner-video-overlay {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+    .corner-video-badge {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.95);
+      background: rgba(5, 8, 14, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 6px;
+    /* Preloader for Rover Page */
+    .rover-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #050608;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+    .rover-preloader__logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 2.2rem;
+      letter-spacing: 0.12em;
+      color: var(--amber-bright);
+      margin-bottom: 8px;
+    }
+    .rover-preloader__bar-wrap {
+      width: 240px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 14px 0 10px;
+    }
+    .rover-preloader__bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff9d00, #ffb833);
+      box-shadow: 0 0 10px #ff9d00;
+      transition: width 0.15s linear;
+    }
+    .rover-preloader__status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #9ca3af;
+      letter-spacing: 0.12em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Preloader -->
+  <div class="rover-preloader" id="roverPreloader">
+    <div class="rover-preloader__logo">P–04 &bull; ROVER</div>
+    <div class="rover-preloader__bar-wrap">
+      <div class="rover-preloader__bar" id="roverLoaderBar"></div>
+    </div>
+    <div class="rover-preloader__status" id="roverLoaderStatus">PRELOADING CHASSIS TELEMETRY…</div>
+  </div>
+  <!-- SIC Back Navigation -->
+  <a href="../index.html#projects" id="sic-back" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(5,5,5,.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,157,0,.45);border-radius:999px;color:var(--amber-bright);font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.12em;text-decoration:none;transition:background .25s,transform .25s" onmouseover="this.style.background='rgba(255,157,0,.15)';this.style.transform='translateX(-3px)'" onmouseout="this.style.background='rgba(5,5,5,.75)';this.style.transform='none'">← BACK TO SIC</a>
+
+  <!-- Top Nav -->
+  <header class="rover-nav">
+    <div style="width:130px;"></div>
+    <a href="#top" class="rover-nav__brand">
+      <span class="rover-nav__badge">P–04</span>
+      <span class="rover-nav__title">AUTONOMOUS ALL-TERRAIN ROVER</span>
+    </a>
+    <nav class="rover-nav__links">
+      <a href="#inspection" class="rover-nav__link">360° Inspection</a>
+      <a href="#subsystems" class="rover-nav__link">Subsystems</a>
+      <a href="#specs" class="rover-nav__link">Hardware</a>
+    </nav>
+  </header>
+
+  <main class="rover-hero" id="top">
+    <!-- Header -->
+    <div class="rover-hero__header">
+      <div class="rover-tagline">PROJECT P–04 &bull; HEAVY MOBILITY PLATFORM</div>
+      <h1 class="rover-hero__title">AUTONOMOUS ALL-TERRAIN ROVER</h1>
+      <p class="rover-hero__subtitle">
+        Engineered by the Student Innovation Council at TGPCET Idea Lab. Built on a heavy welded structural steel frame with independent double-wishbone coilover suspension, high-torque planetary geared drive motors, dual linear steering actuators, and edge AI navigation.
+      </p>
+    </div>
+
+    <!-- 360 Inspection Stage Card -->
+    <section class="viewer-card" id="inspection">
+      <!-- Toolbar -->
+      <div class="viewer-toolbar">
+        <div class="viewer-status">
+          <span class="status-pulse"></span>
+          <span>INTERACTIVE 360° VIEW &bull; HARDWARE CALLOUTS</span>
+        </div>
+        <div class="viewer-controls">
+          <button class="tool-btn" id="btnReset" title="Reset View Angle">
+            <span>↺</span> Reset Angle
+          </button>
+          <button class="tool-btn" id="btnToggleHotspots" title="Toggle Hardware Pins">
+            <span>◉</span> Toggle Hotspots
+          </button>
+          <button class="tool-btn" id="btnZoomIn" title="Zoom In">
+            <span>+</span> Zoom
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Interactive Stage -->
+      <div class="viewer-stage" id="viewerStage">
+        <div class="viewer-image-wrap" id="imageWrap">
+          <img src="../assets/rover.jpg" alt="Autonomous Heavy Rover Chassis - SIC TGPCET" id="roverImg" />
+
+          <!-- Interactive Hotspot 1: High Torque Drive Motors -->
+          <div class="hotspot" style="top: 66%; left: 12%;" data-title="High-Torque Hub Motors" data-tag="PROPULSION" data-desc="High-torque geared planetary motors paired with deep-lug agricultural chevron tires for maximum traction over rough terrain and obstacles.">
+            <div class="hotspot__pin">1</div>
+            <div class="hotspot__tooltip">
+              <div class="tooltip__tag">PROPULSION</div>
+              <h4 class="tooltip__title">High-Torque Hub Motors</h4>
+              <p class="tooltip__desc">Geared planetary motors paired with agricultural deep-lug chevron tires delivering high static stall torque across uneven terrain.</p>
+            </div>
+          </div>
+
+          <!-- Interactive Hotspot 2: Suspension & Linear Actuators -->
+          <div class="hotspot" style="top: 60%; left: 63%;" data-title="Linear Actuator & Steering" data-tag="KINEMATICS" data-desc="Heavy-duty double-wishbone A-arms and long-travel red coilover suspension dampers paired with high-force linear actuators for responsive articulation.">
+            <div class="hotspot__pin">2</div>
+            <div class="hotspot__tooltip">
+              <div class="tooltip__tag">KINEMATICS</div>
+              <h4 class="tooltip__title">Linear Actuator & Coilover Suspension</h4>
+              <p class="tooltip__desc">Long-travel red coilover dampers on articulated double-wishbone arms paired with linear actuators for active suspension and steering.</p>
+            </div>
+          </div>
+
+          <!-- Interactive Hotspot 3: High-Current Motor Drivers -->
+          <div class="hotspot" style="top: 62%; left: 39%;" data-title="High-Current Motor Drivers" data-tag="POWER ELECTRONICS" data-desc="Dual H-bridge heavy-duty MOSFET motor driver modules with integrated heatsinks handling continuous peak currents for 4-wheel independent drive.">
+            <div class="hotspot__pin">3</div>
+            <div class="hotspot__tooltip">
+              <div class="tooltip__tag">POWER ELECTRONICS</div>
+              <h4 class="tooltip__title">MOSFET Motor Drivers & Relay Bank</h4>
+              <p class="tooltip__desc">Dual high-amperage H-bridge motor driver circuits with optical isolation and thermal management for heavy motor surges.</p>
+            </div>
+          </div>
+
+          <!-- Interactive Hotspot 4: Dual Power Supply Pack -->
+          <div class="hotspot" style="top: 52%; left: 39%;" data-title="Power Supply & Battery Bank" data-tag="ENERGY STORAGE" data-desc="Dual high-capacity sealed lead-acid (SLA) deep-cycle batteries wired for dedicated motor drive current and isolated low-noise 5V/12V logic rails.">
+            <div class="hotspot__pin">4</div>
+            <div class="hotspot__tooltip">
+              <div class="tooltip__tag">ENERGY STORAGE</div>
+              <h4 class="tooltip__title">Dual Lead-Acid Power Supply</h4>
+              <p class="tooltip__desc">Heavy-duty dual battery bank providing clean, high-discharge current to the traction motors while shielding microcontroller logic.</p>
+            </div>
+          </div>
+
+          <!-- Interactive Hotspot 5: Raspberry Pi & 4K Vision Bay -->
+          <div class="hotspot" style="top: 40%; left: 51%;" data-title="Compute & 4K Vision Bay" data-tag="AUTONOMOUS NAVIGATION" data-desc="Raspberry Pi onboard compute running ROS2 / OpenCV with a 4K wide-angle webcam for real-time obstacle avoidance, path tracking, and telemetry.">
+            <div class="hotspot__pin">5</div>
+            <div class="hotspot__tooltip">
+              <div class="tooltip__tag">AUTONOMOUS NAVIGATION</div>
+              <h4 class="tooltip__title">Raspberry Pi & 4K Webcam Rig</h4>
+              <p class="tooltip__desc">Raspberry Pi onboard SBC running OpenCV vision pipelines fed by an ultra-HD 4K camera mount for spatial mapping and path tracking.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compass Rotation Meter -->
+        <div class="compass-overlay">
+          <div class="compass-dial" id="compassDial"></div>
+          <span class="compass-value" id="compassValue">PAN: 0°</span>
+        </div>
+
+        <!-- Drag instruction hint -->
+        <div class="drag-instruction">
+          <span>DRAG TO INSPECT 360° &bull; CLICK PINS FOR SPECS</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subsystems & Hardware Specs -->
+    <section class="arch-section" id="subsystems">
+      <h2 class="section-title">Engineered Hardware Architecture</h2>
+      <p class="section-sub">
+        Designed for harsh industrial and field navigation, every component is selected for high load capacity, electrical isolation, and edge autonomous perception.
+      </p>
+
+      <div class="specs-grid">
+        <!-- Motors & Traction -->
+        <div class="spec-card">
+          <span class="spec-icon">⚡</span>
+          <h3 class="spec-title">High-Torque Drive Motors</h3>
+          <p class="spec-body">
+            Geared planetary DC motors delivering exceptional stall torque for climbing steep inclines and navigating muddy or gravel terrain with zero wheel slip.
+          </p>
+          <div class="spec-meta">
+            <span class="spec-meta__label">CONFIGURATION</span>
+            <span class="spec-meta__val">Independent 4-Wheel Drive</span>
+          </div>
+        </div>
+
+        <!-- Motor Drivers -->
+        <div class="spec-card">
+          <span class="spec-icon">🎛️</span>
+          <h3 class="spec-title">MOSFET Motor Drivers</h3>
+          <p class="spec-body">
+            Heavy-current H-bridge driver bridges equipped with PWM speed modulation, regenerative braking protection, and isolated microcontroller logic feeds.
+          </p>
+          <div class="spec-meta">
+            <span class="spec-meta__label">CURRENT RATING</span>
+            <span class="spec-meta__val">High-Amperage Dual Channel</span>
+          </div>
+        </div>
+
+        <!-- Linear Actuators -->
+        <div class="spec-card">
+          <span class="spec-icon">🦾</span>
+          <h3 class="spec-title">Linear Actuators & Suspension</h3>
+          <p class="spec-body">
+            Heavy-duty motorized linear actuators for active suspension leveling, steering articulation, and payload tilt mechanisms on tough terrain.
+          </p>
+          <div class="spec-meta">
+            <span class="spec-meta__label">SUSPENSION</span>
+            <span class="spec-meta__val">Coilover Wishbone</span>
+          </div>
+        </div>
+
+        <!-- Compute: RPi & 4K Vision -->
+        <div class="spec-card">
+          <span class="spec-icon">🧠</span>
+          <h3 class="spec-title">Raspberry Pi + 4K Vision</h3>
+          <p class="spec-body">
+            Powered by a Raspberry Pi running Linux and OpenCV. An integrated 4K wide-angle webcam delivers real-time spatial vision, lane detection, and obstacle classification.
+          </p>
+          <div class="spec-meta">
+            <span class="spec-meta__label">PERCEPTION</span>
+            <span class="spec-meta__val">4K Edge Vision (OpenCV)</span>
+          </div>
+        </div>
+
+        <!-- Power Supply -->
+        <div class="spec-card">
+          <span class="spec-icon">🔋</span>
+          <h3 class="spec-title">Dual Lead-Acid Power Supply</h3>
+          <p class="spec-body">
+            High-capacity rechargeable lead-acid power pack providing high surge amps for the heavy drive motors, backed by step-down buck regulators for clean 5V compute.
+          </p>
+          <div class="spec-meta">
+            <span class="spec-meta__label">POWER RAILS</span>
+            <span class="spec-meta__val">Dual SLA + Isolated Buck</span>
+          </div>
+        </div>
+
+        <!-- Chassis & Fabrication -->
+        <div class="spec-card">
+          <span class="spec-icon">🛠️</span>
+          <h3 class="spec-title">Welded Tubular Steel Chassis</h3>
+          <p class="spec-body">
+            Precision fabricated at TGPCET Idea Lab using square-section tubular steel MIG welding, reinforced strut brackets, and heavy agricultural tires.
+          </p>
+          <div class="spec-meta">
+            <span class="spec-meta__label">FABRICATION</span>
+            <span class="spec-meta__val">TGPCET Idea Lab</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Autonomous Control Pipeline -->
+      <div class="pipeline-grid" id="specs">
+        <div class="pipeline-card">
+          <div class="pipeline-card__num">PHASE 01 — SENSING</div>
+          <h4 class="pipeline-card__title">Perception &amp; Feedback</h4>
+          <ul class="pipeline-card__list">
+            <li>4K Webcam streaming real-time edge telemetry</li>
+            <li>Wheel tachometer / encoder feedback</li>
+            <li>Voltage monitoring across battery cells</li>
+            <li>Inertial sensor leveling diagnostics</li>
+          </ul>
+        </div>
+        <div class="pipeline-card">
+          <div class="pipeline-card__num">PHASE 02 — COMPUTE</div>
+          <h4 class="pipeline-card__title">Navigation &amp; Kinematics</h4>
+          <ul class="pipeline-card__list">
+            <li>Raspberry Pi multi-threaded control loop</li>
+            <li>OpenCV contour analysis &amp; path following</li>
+            <li>PWM differential velocity distribution</li>
+            <li>Fail-safe remote override over WiFi / RF</li>
+          </ul>
+        </div>
+        <div class="pipeline-card">
+          <div class="pipeline-card__num">PHASE 03 — ACTUATION</div>
+          <h4 class="pipeline-card__title">Ground Engagement</h4>
+          <ul class="pipeline-card__list">
+            <li>High-torque motor response under heavy load</li>
+            <li>Active linear actuator geometry adjustment</li>
+            <li>Independent bump absorption via coilovers</li>
+            <li>Deep chevron tread for high tractive grip</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="rover-footer">
+    <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+      <div>
+        <p>&copy; 2026 Student Innovation Council &bull; TGPCET Idea Lab</p>
+      </div>
+      <div>
+        <a href="../index.html#projects">← Back to All SIC Projects</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Corner Dual Live Videos on Loop (Always playing from start, zero scroll effect) -->
+  <div class="corner-video-widget" id="cornerVideoWidget">
+    <div class="corner-video-header">
+      <div class="corner-video-status">
+        <span class="live-pulse-amber"></span>
+        <span>FIELD TEST LOG</span>
+      </div>
+      <div class="corner-video-tabs">
+        <button class="corner-video-tab active" id="tabVid1" onclick="switchRoverVideo(1)">CAM 1</button>
+        <button class="corner-video-tab" id="tabVid2" onclick="switchRoverVideo(2)">CAM 2</button>
+        <button class="corner-video-tab" id="tabVid3" onclick="switchRoverVideo(3)">CAM 3</button>
+      </div>
+      <div class="corner-video-actions">
+        <button class="corner-video-btn" id="btnMuteVideo" onclick="toggleRoverVideoMute()">UNMUTE</button>
+        <button class="corner-video-btn" onclick="toggleRoverVideoMinimize()">_</button>
+      </div>
+    </div>
+    <div class="corner-video-inner">
+      <!-- Video 1: Field Run / Outdoor / Drive -->
+      <video id="roverVideo1" class="active" autoplay loop muted playsinline preload="auto">
+        <source src="assets/rover_test_1.mp4" type="video/mp4" />
+        <source src="../assets/rover_test_1.mp4" type="video/mp4" />
+      </video>
+
+      <!-- Video 2: Articulation / Suspension / Workshop Test -->
+      <video id="roverVideo2" loop muted playsinline preload="auto">
+        <source src="assets/rover_test_2.mp4" type="video/mp4" />
+        <source src="../assets/rover_test_2.mp4" type="video/mp4" />
+      </video>
+
+      <!-- Video 3: 4K Close-Up Chassis Walkaround / FPS Inspection -->
+      <video id="roverVideo3" loop muted playsinline preload="auto">
+        <source src="assets/rover_test_3.mp4" type="video/mp4" />
+        <source src="../assets/rover_test_3.mp4" type="video/mp4" />
+      </video>
+
+      <div class="corner-video-overlay">
+        <span class="corner-video-badge" id="roverVideoBadge">FIELD RUN 01 &bull; TGPCET IDEA LAB</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 360 Interactive Inspection Controller Script -->
+  <script>
+    (function() {
+      const stage = document.getElementById('viewerStage');
+      const wrap = document.getElementById('imageWrap');
+      const compassDial = document.getElementById('compassDial');
+      const compassValue = document.getElementById('compassValue');
+      const btnReset = document.getElementById('btnReset');
+      const btnToggleHotspots = document.getElementById('btnToggleHotspots');
+      const btnZoomIn = document.getElementById('btnZoomIn');
+      const hotspots = document.querySelectorAll('.hotspot');
+
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let rotationAngle = 0; // Degrees
+      let tiltAngle = 0;
+      let zoomLevel = 1.0;
+      let showHotspots = true;
+
+      // Mouse / Touch Interaction for 360 Inspection
+      function onStart(e) {
+        isDragging = true;
+        const pt = e.touches ? e.touches[0] : e;
+        startX = pt.clientX;
+        startY = pt.clientY;
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        const pt = e.touches ? e.touches[0] : e;
+        const deltaX = pt.clientX - startX;
+        const deltaY = pt.clientY - startY;
+
+        startX = pt.clientX;
+        startY = pt.clientY;
+
+        // Orbit pan
+        rotationAngle = (rotationAngle + deltaX * 0.45) % 360;
+        tiltAngle = Math.max(-15, Math.min(15, tiltAngle - deltaY * 0.15));
+
+        updateTransform();
+      }
+
+      function onEnd() {
+        isDragging = false;
+      }
+
+      function updateTransform() {
+        // Perspective rotation with subtle skew giving 3D spatial depth
+        wrap.style.transform = `scale(${zoomLevel}) perspective(900px) rotateY(${rotationAngle * 0.25}deg) rotateX(${tiltAngle * 0.25}deg)`;
+
+        // Update compass
+        const deg = Math.round(rotationAngle < 0 ? rotationAngle + 360 : rotationAngle);
+        if (compassDial) compassDial.style.transform = `rotate(${deg}deg)`;
+        if (compassValue) compassValue.innerText = `PAN: ${deg}°`;
+      }
+
+      stage.addEventListener('mousedown', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onEnd);
+
+      stage.addEventListener('touchstart', onStart, { passive: true });
+      window.addEventListener('touchmove', onMove, { passive: true });
+      window.addEventListener('touchend', onEnd);
+
+      // Reset Button
+      btnReset.addEventListener('click', () => {
+        rotationAngle = 0;
+        tiltAngle = 0;
+        zoomLevel = 1.0;
+        updateTransform();
+      });
+
+      // Toggle Hotspots
+      btnToggleHotspots.addEventListener('click', () => {
+        showHotspots = !showHotspots;
+        hotspots.forEach(h => {
+          h.style.display = showHotspots ? 'block' : 'none';
+        });
+        btnToggleHotspots.classList.toggle('active', showHotspots);
+      });
+
+      // Zoom Toggle
+      btnZoomIn.addEventListener('click', () => {
+        zoomLevel = zoomLevel === 1.0 ? 1.35 : 1.0;
+        btnZoomIn.classList.toggle('active', zoomLevel > 1.0);
+        updateTransform();
+      });
+
+      // Hotspot click / focus
+      hotspots.forEach(pin => {
+        pin.addEventListener('click', (e) => {
+          e.stopPropagation();
+          hotspots.forEach(h => { if (h !== pin) h.classList.remove('is-active'); });
+          pin.classList.toggle('is-active');
+        });
+      });
+
+      document.addEventListener('click', () => {
+        hotspots.forEach(h => h.classList.remove('is-active'));
+      });
+    })();
+
+    // Video Switching & Controls for 3 Field Test Videos
+    let currentRoverVid = 1;
+    function switchRoverVideo(num) {
+      currentRoverVid = num;
+      const v1 = document.getElementById('roverVideo1');
+      const v2 = document.getElementById('roverVideo2');
+      const v3 = document.getElementById('roverVideo3');
+      const tab1 = document.getElementById('tabVid1');
+      const tab2 = document.getElementById('tabVid2');
+      const tab3 = document.getElementById('tabVid3');
+      const badge = document.getElementById('roverVideoBadge');
+
+      const videos = [v1, v2, v3];
+      const tabs = [tab1, tab2, tab3];
+
+      videos.forEach((v, idx) => {
+        if (!v) return;
+        if (idx === num - 1) {
+          v.classList.add('active');
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+          v.classList.remove('active');
+        }
+      });
+
+      tabs.forEach((t, idx) => {
+        if (!t) return;
+        t.classList.toggle('active', idx === num - 1);
+      });
+
+      if (badge) {
+        if (num === 1) badge.innerText = 'FIELD RUN 01 • TGPCET IDEA LAB';
+        else if (num === 2) badge.innerText = 'MECHANICAL BENCH 02 • TGPCET IDEA LAB';
+        else if (num === 3) badge.innerText = 'CHASSIS WALKAROUND 03 • TGPCET IDEA LAB';
+      }
+    }
+
+    function toggleRoverVideoMute() {
+      const v1 = document.getElementById('roverVideo1');
+      const v2 = document.getElementById('roverVideo2');
+      const v3 = document.getElementById('roverVideo3');
+      const btn = document.getElementById('btnMuteVideo');
+      const videos = [v1, v2, v3];
+      const activeVid = videos[currentRoverVid - 1];
+      if (activeVid) {
+        activeVid.muted = !activeVid.muted;
+        if (btn) btn.innerText = activeVid.muted ? 'UNMUTE' : 'MUTE';
+      }
+    }
+
+    function toggleRoverVideoMinimize() {
+      const w = document.getElementById('cornerVideoWidget');
+      if (w) {
+        w.classList.toggle('minimized');
+      }
+    }
+
+    // Rover Asset Preloader
+    window.addEventListener('DOMContentLoaded', () => {
+      const p = document.getElementById('roverPreloader');
+      const bar = document.getElementById('roverLoaderBar');
+      const status = document.getElementById('roverLoaderStatus');
+      const v1 = document.getElementById('roverVideo1');
+      if (v1) v1.play().catch(() => {});
+
+      const roverImg = new Image();
+      roverImg.src = '../assets/rover.jpg';
+
+      if (bar) bar.style.width = '65%';
+
+      roverImg.onload = dismissRoverPreloader;
+      roverImg.onerror = dismissRoverPreloader;
+
+      setTimeout(dismissRoverPreloader, 1400); // Max delay safety
+
+      function dismissRoverPreloader() {
+        if (!p || p.style.display === 'none') return;
+        if (bar) bar.style.width = '100%';
+        if (status) status.innerText = 'SYSTEM READY.';
+        setTimeout(() => {
+          p.style.opacity = '0';
+          setTimeout(() => { p.style.display = 'none'; }, 500);
+        }, 300);
+      }
+    });
+  </script>
+</body>
+</html>

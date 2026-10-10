@@ -89,22 +89,29 @@ a {
 
 .preloader__inner {
   text-align: center;
+  max-width: 420px;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .preloader__logo {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 4rem;
-  letter-spacing: 0.1em;
+  font-size: clamp(3.5rem, 8vw, 5rem);
+  letter-spacing: 0.12em;
   color: var(--accent);
+  text-shadow: 0 0 30px rgba(200, 255, 0, 0.4);
 }
 
 .preloader__bar {
-  width: 220px;
-  height: 2px;
-  background: var(--line);
-  margin: 1.2rem auto;
+  width: 100%;
+  max-width: 340px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 1.2rem auto 0.8rem;
+  border-radius: 2px;
   overflow: hidden;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.8);
 }
 
 .preloader__bar span {
@@ -112,13 +119,24 @@ a {
   height: 100%;
   width: 0%;
   background: var(--accent);
+  box-shadow: 0 0 14px var(--accent);
+  transition: width 0.08s linear;
 }
 
 .preloader__status {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--ink-dim);
   letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.preloader__sub {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.1em;
+  margin-top: 6px;
 }
 
 /* ============ CURSOR ============ */

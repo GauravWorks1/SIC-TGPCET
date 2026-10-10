@@ -7,35 +7,117 @@ const $ = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ============ PRELOADER ============ */
+/* ============ COMPREHENSIVE ASSET PRELOADER (LOAD EVERYTHING FIRST) ============ */
 const preloader = $('#preloader');
 const statusEl = $('#preloaderStatus');
-const statusMsgs = ['booting innovation…', 'loading 3d printers…', 'waking up poppy…', 'compiling ideas…', 'ready.'];
-let msgIdx = 0;
-const msgTimer = setInterval(() => {
-  msgIdx = Math.min(msgIdx + 1, statusMsgs.length - 1);
-  statusEl.textContent = statusMsgs[msgIdx];
-}, 350);
+const preloaderPct = $('#preloaderPct');
+const preloaderBar = $('#preloaderBar');
+const preloaderSub = $('#preloaderSub');
 
-anime({
-  targets: '#preloaderBar',
-  width: '100%',
-  duration: 1600,
-  easing: 'easeInOutQuart',
-  complete: () => {
-    clearInterval(msgTimer);
+let loadedAssets = 0;
+let totalAssets = 0;
+let isPreloadDone = false;
+
+// Immediate core essentials list in case manifest is fetching
+let preloadList = [
+  'assets/tulsi.jpeg',
+  'assets/spotmicro.jpg',
+  'assets/inmoov.jpg',
+  'assets/rover.jpg'
+];
+
+function updateLoaderUI(loaded, total, currentItem) {
+  const pct = total > 0 ? Math.min(Math.round((loaded / total) * 100), 100) : 0;
+  if (preloaderBar) preloaderBar.style.width = pct + '%';
+  if (preloaderPct) preloaderPct.textContent = pct + '%';
+  if (preloaderSub) preloaderSub.textContent = `CACHED ${loaded} / ${total} ASSETS`;
+  if (statusEl && currentItem) {
+    statusEl.textContent = `PRELOADING: ${currentItem.split('/').pop()}`;
+  }
+}
+
+// Fetch all 520 site assets from assets_manifest.json and cache them
+fetch('assets_manifest.json')
+  .then(res => res.json())
+  .then(manifest => {
+    // Exclude oversized video binaries from blob-stalling to prevent browser memory exhaustion,
+    // but preload all 240 InMoov frames, gallery photos, and project assets completely
+    preloadList = manifest.filter(item => !item.endsWith('.mp4'));
+    startComprehensivePreload();
+  })
+  .catch(() => {
+    startComprehensivePreload();
+  });
+
+function startComprehensivePreload() {
+  totalAssets = preloadList.length;
+  updateLoaderUI(0, totalAssets, 'INITIALIZING ASSET REPOSITORY');
+
+  let queue = [...preloadList];
+  const CONCURRENCY = 14; // Fast parallel download pipeline
+
+  function loadNext() {
+    if (queue.length === 0) {
+      if (loadedAssets >= totalAssets) {
+        finishPreload();
+      }
+      return;
+    }
+
+    const src = queue.shift();
+    const isImage = /\.(jpg|jpeg|png|svg|webp)$/i.test(src);
+
+    if (isImage) {
+      const img = new Image();
+      img.onload = () => handleItemLoaded(src);
+      img.onerror = () => handleItemLoaded(src);
+      img.src = src;
+    } else {
+      // CSS, JS, data
+      fetch(src)
+        .then(() => handleItemLoaded(src))
+        .catch(() => handleItemLoaded(src));
+    }
+  }
+
+  function handleItemLoaded(src) {
+    loadedAssets++;
+    updateLoaderUI(loadedAssets, totalAssets, src);
+    if (loadedAssets >= totalAssets) {
+      finishPreload();
+    } else {
+      loadNext();
+    }
+  }
+
+  // Launch initial concurrent workers
+  for (let i = 0; i < Math.min(CONCURRENCY, totalAssets); i++) {
+    loadNext();
+  }
+}
+
+function finishPreload() {
+  if (isPreloadDone) return;
+  isPreloadDone = true;
+
+  if (preloaderBar) preloaderBar.style.width = '100%';
+  if (preloaderPct) preloaderPct.textContent = '100%';
+  if (statusEl) statusEl.textContent = 'ALL ASSETS READY · SYSTEM ONLINE';
+  if (preloaderSub) preloaderSub.textContent = `CACHED ${totalAssets} / ${totalAssets} ASSETS`;
+
+  setTimeout(() => {
     anime({
       targets: preloader,
-      opacity: 0,
-      duration: 500,
+      opacity: [1, 0],
+      duration: 600,
       easing: 'easeOutQuad',
       complete: () => {
         preloader.style.display = 'none';
         heroIntro();
       }
     });
-  }
-});
+  }, 400);
+}
 
 /* ============ HERO INTRO ============ */
 /* split hero words into chars */
