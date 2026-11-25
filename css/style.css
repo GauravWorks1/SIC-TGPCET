@@ -1004,6 +1004,11 @@ a {
   grid-column: span 2;
 }
 
+.gallery__item--hero {
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
 /* Overlay for placeholder items */
 .gallery__ph {
   position: absolute;
@@ -1043,6 +1048,11 @@ a {
     padding: 0 2rem;
   }
 
+  .gallery__item--hero {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+
   .gallery__item--wide {
     grid-column: span 2;
   }
@@ -1059,6 +1069,11 @@ a {
     grid-auto-rows: 170px;
     gap: 1rem;
     padding: 0 1.5rem;
+  }
+
+  .gallery__item--hero {
+    grid-column: span 2;
+    grid-row: span 2;
   }
 
   .gallery__item--wide {
@@ -1079,6 +1094,7 @@ a {
     padding: 0 1rem;
   }
 
+  .gallery__item--hero,
   .gallery__item--tall,
   .gallery__item--wide {
     grid-row: auto;
