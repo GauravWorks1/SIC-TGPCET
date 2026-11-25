@@ -994,7 +994,6 @@
         <button class="corner-video-tab" id="tabVid3" onclick="switchRoverVideo(3)">CAM 3</button>
       </div>
       <div class="corner-video-actions">
-        <button class="corner-video-btn" id="btnMuteVideo" onclick="toggleRoverVideoMute()">UNMUTE</button>
         <button class="corner-video-btn" onclick="toggleRoverVideoMinimize()">_</button>
       </div>
     </div>
@@ -1162,19 +1161,6 @@
         if (num === 1) badge.innerText = 'FIELD RUN 01 • TGPCET IDEA LAB';
         else if (num === 2) badge.innerText = 'MECHANICAL BENCH 02 • TGPCET IDEA LAB';
         else if (num === 3) badge.innerText = 'CHASSIS WALKAROUND 03 • TGPCET IDEA LAB';
-      }
-    }
-
-    function toggleRoverVideoMute() {
-      const v1 = document.getElementById('roverVideo1');
-      const v2 = document.getElementById('roverVideo2');
-      const v3 = document.getElementById('roverVideo3');
-      const btn = document.getElementById('btnMuteVideo');
-      const videos = [v1, v2, v3];
-      const activeVid = videos[currentRoverVid - 1];
-      if (activeVid) {
-        activeVid.muted = !activeVid.muted;
-        if (btn) btn.innerText = activeVid.muted ? 'UNMUTE' : 'MUTE';
       }
     }
 

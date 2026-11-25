@@ -168,7 +168,6 @@
           <button class="spot-video-tab" id="tabSpot2" onclick="switchSpotVideo(2)">CAM 2</button>
         </div>
         <div class="spot-video-actions">
-          <button class="spot-video-btn" id="btnMuteSpot" onclick="toggleSpotMute()">UNMUTE</button>
           <button class="spot-video-btn" onclick="toggleSpotMinimize()">_</button>
         </div>
       </div>
@@ -224,17 +223,6 @@
           badge.innerText = num === 1 
             ? 'GAIT ROUTINE 01 • TGPCET IDEA LAB' 
             : 'BALANCE TEST 02 • TGPCET IDEA LAB';
-        }
-      }
-
-      function toggleSpotMute() {
-        const v1 = document.getElementById('spotVideo1');
-        const v2 = document.getElementById('spotVideo2');
-        const btn = document.getElementById('btnMuteSpot');
-        const activeVid = currentSpotVid === 1 ? v1 : v2;
-        if (activeVid) {
-          activeVid.muted = !activeVid.muted;
-          if (btn) btn.innerText = activeVid.muted ? 'UNMUTE' : 'MUTE';
         }
       }
 
