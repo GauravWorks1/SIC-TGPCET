@@ -945,6 +945,9 @@ a {
   max-width: 1400px;
   margin: 0 auto 2.5rem;
   padding: 0 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .gallery-featured__card {

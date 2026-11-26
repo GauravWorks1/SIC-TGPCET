@@ -71,7 +71,7 @@ if (burger && mobileMenu) {
   if (!grid || !lightbox) return;
 
   const items = $$('.gallery__item', grid);
-  const featured = $('.gallery-featured__card');
+  const featuredCards = $$('.gallery-featured__card');
   const lbImg = $('#lightboxImg');
   const lbCap = $('#lightboxCaption');
   const lbCount = $('#lightboxCounter');
@@ -102,12 +102,12 @@ if (burger && mobileMenu) {
 
   function buildList() {
     const list = [];
-    if (featured) {
+    featuredCards.forEach(card => {
       list.push({
-        src: featured.dataset.lightboxSrc,
-        alt: featured.dataset.lightboxAlt
+        src: card.dataset.lightboxSrc,
+        alt: card.dataset.lightboxAlt
       });
-    }
+    });
     items.forEach(item => {
       if (!item.classList.contains('is-hidden')) {
         const img = item.querySelector('img');
@@ -140,9 +140,9 @@ if (burger && mobileMenu) {
     document.body.style.overflow = '';
   }
 
-  if (featured) {
-    featured.addEventListener('click', () => openLightbox(featured.dataset.lightboxSrc));
-  }
+  featuredCards.forEach(card => {
+    card.addEventListener('click', () => openLightbox(card.dataset.lightboxSrc));
+  });
 
   items.forEach(item => {
     item.addEventListener('click', () => {
