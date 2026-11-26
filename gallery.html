@@ -83,112 +83,246 @@
   </header>
 
   <section class="section gallery" id="gallery" style="padding-top:2rem">
-    <div class="gallery__grid">
-      <!-- HERO TOP FEATURE: IMG_1575 (Hon. Minister Shri Nitin Gadkari with Team SIC) -->
-      <div class="gallery__item gallery__item--hero" data-reveal>
-        <img src="assets/gallery/new_1.jpg" alt="Hon. Union Minister Shri Nitin Gadkari with Team SIC at TGPCET Idea Lab">
+    <!-- FEATURED SPOTLIGHT -->
+    <div class="gallery-featured" data-reveal>
+      <article class="gallery-featured__card" data-lightbox-src="assets/gallery/new_1.jpg"
+        data-lightbox-alt="Hon. Union Minister Shri Nitin Gadkari with Team SIC at TGPCET Idea Lab"
+        data-lightbox-tag="Dignitary Visit">
+        <div class="gallery-featured__media">
+          <img src="assets/gallery/new_1.jpg"
+            alt="Hon. Union Minister Shri Nitin Gadkari with Team SIC at TGPCET Idea Lab" />
+        </div>
+        <div class="gallery-featured__body">
+          <span class="gallery-featured__badge">Featured Moment</span>
+          <h2 class="gallery-featured__title">Hon. Union Minister Shri Nitin Gadkari with Team SIC</h2>
+          <p class="gallery-featured__desc">Showcasing student-built robotics, autonomous rovers, and Idea Lab prototypes
+            at TGPCET.</p>
+          <span class="gallery-featured__action">CLICK TO VIEW FULLSCREEN ↗</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- CATEGORY FILTER BAR -->
+    <div class="gallery-controls">
+      <div class="gallery-filters" role="tablist" aria-label="Gallery categories">
+        <button class="gallery-filter is-active" data-filter="all" type="button">All (24)</button>
+        <button class="gallery-filter" data-filter="dignitary" type="button">Dignitary Visits (5)</button>
+        <button class="gallery-filter" data-filter="robotics" type="button">Robotics &amp; Builds (8)</button>
+        <button class="gallery-filter" data-filter="events" type="button">Events &amp; Lab (11)</button>
+      </div>
+      <span class="gallery-count" id="galleryCount">SHOWING 24 PHOTOS</span>
+    </div>
+
+    <!-- UNIFORM RESPONSIVE GRID -->
+    <div class="gallery__grid" id="galleryGrid">
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/gallery/new_2.jpg" alt="Humanoid Head 3D Wind Turbine Project Demonstration" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">Humanoid Head &amp; 3D Wind Turbine Demo</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 2 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_2.jpg" alt="Humanoid Head 3D Wind Turbine Project Demonstration">
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/gallery/new_3.jpg" alt="SIC Core Engineering & Software Team Sprint" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">SIC Core Engineering &amp; Software Sprint</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 3 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_3.jpg" alt="SIC Core Engineering & Software Team Sprint">
+      <div class="gallery__item" data-category="dignitary" data-reveal>
+        <img src="assets/gallery/new_4.jpg" alt="SpotMicro Quadruped & Humanoid Head Live Dignitary Showcase" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Dignitary Visit</span>
+          <span class="gallery__title">SpotMicro &amp; Humanoid Head Live Showcase</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 4 -->
-      <div class="gallery__item gallery__item--tall" data-reveal>
-        <img src="assets/gallery/new_4.jpg" alt="SpotMicro Quadruped & Humanoid Head Live Dignitary Showcase">
+      <div class="gallery__item" data-category="dignitary" data-reveal>
+        <img src="assets/gallery/new_5.jpg" alt="VIP Dignitary & Law Enforcement Innovation Inspection" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Dignitary Visit</span>
+          <span class="gallery__title">VIP Dignitary Innovation Inspection</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 5 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_5.jpg" alt="VIP Dignitary & Law Enforcement Innovation Inspection">
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/gallery/new_6.jpg" alt="All-Terrain Autonomous Rover Chassis Review" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">All-Terrain Autonomous Rover Chassis</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 6 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_6.jpg" alt="All-Terrain Autonomous Rover Chassis Review">
+      <div class="gallery__item" data-category="dignitary" data-reveal>
+        <img src="assets/gallery/new_7.jpg" alt="Rover Campus Testing & Dignitary Felicitations" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Dignitary Visit</span>
+          <span class="gallery__title">Rover Campus Testing &amp; Felicitations</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 7 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_7.jpg" alt="Rover Campus Testing & Dignitary Felicitations">
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/gallery/new_8.jpg" alt="Go-Kart & Rover Night Testing Demonstration" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">Go-Kart &amp; Rover Night Testing</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 8 -->
-      <div class="gallery__item gallery__item--tall" data-reveal>
-        <img src="assets/gallery/new_8.jpg" alt="Go-Kart & Rover Night Testing Demonstration">
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/gallery/new_9.jpg" alt="SIC Team Night Exhibition & Prototype Review" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Night Exhibition &amp; Prototype Review</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 9 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_9.jpg" alt="SIC Team Night Exhibition & Prototype Review">
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/gallery/new_10.jpg" alt="Outdoor Rover Platform Presentation" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">Outdoor Rover Platform Presentation</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 10 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_10.jpg" alt="Outdoor Rover Platform Presentation">
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/gallery/new_11.jpg" alt="INNOVATEX Annual Innovation Gala & Grand Team Stage" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">INNOVATEX Annual Innovation Gala</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 11 -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_11.jpg" alt="INNOVATEX Annual Innovation Gala & Grand Team Stage">
+      <div class="gallery__item" data-category="dignitary" data-reveal>
+        <img src="assets/gallery/new_12.jpg" alt="Student Explaining InMoov Humanoid Cranium to Senior Academic Dignitary" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Dignitary Visit</span>
+          <span class="gallery__title">InMoov Cranium Academic Review</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 12: Idea Lab Dignitary Review -->
-      <div class="gallery__item" data-reveal>
-        <img src="assets/gallery/new_12.jpg" alt="Student Explaining InMoov Humanoid Cranium to Senior Academic Dignitary">
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/gallery/new_13.jpg" alt="Robotics Lab Showcase of SpotMicro and Bionic Robotic Architecture" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">SpotMicro &amp; Bionic Architecture</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 13: SpotMicro & Robotics Bench Showcase -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_13.jpg" alt="Robotics Lab Showcase of SpotMicro and Bionic Robotic Architecture">
+      <div class="gallery__item" data-category="dignitary" data-reveal>
+        <img src="assets/gallery/new_14.jpg" alt="Idea Lab 3D Printing and Industrial Mechatronics Presentation" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Dignitary Visit</span>
+          <span class="gallery__title">3D Printing &amp; Mechatronics Tour</span>
+        </div>
       </div>
 
-      <!-- NEW PHOTO 14: Idea Lab 3D Printing & Robotics Tour -->
-      <div class="gallery__item gallery__item--wide" data-reveal>
-        <img src="assets/gallery/new_14.jpg" alt="Idea Lab 3D Printing and Industrial Mechatronics Presentation">
+      <!-- EXISTING ARCHIVE PHOTOS -->
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/1.jpeg" alt="SIC at work" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">SIC at Work</span>
+        </div>
       </div>
 
-      <!-- ================= EXISTING ARCHIVE PHOTOS ================= -->
-      <!-- IMAGE 1 -->
-      <div class="gallery__item gallery__item--tall" data-reveal><img src="assets/1.jpeg" alt="SIC at work"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/2.jpeg" alt="Idea Lab" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">TGPCET Idea Lab</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 2 -->
-      <div class="gallery__item" data-reveal><img src="assets/2.jpeg" alt="Idea Lab"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/3.jpeg" alt="Workshop in the Idea Lab" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Workshop in the Idea Lab</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 3 -->
-      <div class="gallery__item" data-reveal><img src="assets/3.jpeg" alt="Workshop in the Idea Lab"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/4.jpeg" alt="Team SIC" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Team SIC</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 4 -->
-      <div class="gallery__item gallery__item--wide" data-reveal><img src="assets/4.jpeg" alt="Team SIC"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/5.jpeg" alt="Hack Night" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Hack Night</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 5 -->
-      <div class="gallery__item" data-reveal><img src="assets/5.jpeg" alt="Hack Night"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/7.jpeg" alt="Demo Day" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Demo Day</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 7 -->
-      <div class="gallery__item" data-reveal><img src="assets/7.jpeg" alt="Demo Day"></div>
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/8.jpeg" alt="Electronics Workshop" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">Electronics Workshop</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 8 -->
-      <div class="gallery__item" data-reveal><img src="assets/8.jpeg" alt="Electronics Workshop"></div>
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/9.jpeg" alt="Robotics Build" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">Robotics Build</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 9 -->
-      <div class="gallery__item" data-reveal><img src="assets/9.jpeg" alt="Robotics Build"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/10.jpeg" alt="Team Collaboration" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Team Collaboration</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 10 -->
-      <div class="gallery__item gallery__item--wide" data-reveal><img src="assets/10.jpeg" alt="Team Collaboration"></div>
+      <div class="gallery__item" data-category="events" data-reveal>
+        <img src="assets/11.jpeg" alt="Innovation Session" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Events &amp; Lab</span>
+          <span class="gallery__title">Innovation Session</span>
+        </div>
+      </div>
 
-      <!-- IMAGE 11 -->
-      <div class="gallery__item" data-reveal><img src="assets/11.jpeg" alt="Innovation Session"></div>
-
-      <!-- IMAGE 13 -->
-      <div class="gallery__item" data-reveal><img src="assets/13.jpeg" alt="Final Build"></div>
+      <div class="gallery__item" data-category="robotics" data-reveal>
+        <img src="assets/13.jpeg" alt="Final Build" loading="lazy">
+        <div class="gallery__caption">
+          <span class="gallery__tag">Robotics &amp; Builds</span>
+          <span class="gallery__title">Final Build</span>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="gallery-lightbox__close" id="lightboxClose" aria-label="Close">×</button>
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="lightboxPrev" aria-label="Previous photo">‹</button>
+    <div class="gallery-lightbox__inner">
+      <img class="gallery-lightbox__img" id="lightboxImg" src="" alt="" />
+      <div class="gallery-lightbox__meta">
+        <p class="gallery-lightbox__caption" id="lightboxCaption"></p>
+        <span class="gallery-lightbox__counter" id="lightboxCounter"></span>
+      </div>
+    </div>
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="lightboxNext" aria-label="Next photo">›</button>
+  </div>
 
   <footer class="footer">
     <div class="footer__bottom mono">
